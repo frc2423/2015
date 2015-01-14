@@ -23,6 +23,7 @@ class MyRobot(wpilib.IterativeRobot):
             control robot in autonmode
         '''
         self.motor.set(.75)
+        self.motor2.set(.3)
         
     
     def teleopInit(self):
