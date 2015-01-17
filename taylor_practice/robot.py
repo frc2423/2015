@@ -20,7 +20,7 @@ class MyRobot(wpilib.IterativeRobot):
     
     def autonomousPeriodic(self):
         '''
-            control robot in autonmode
+            control robot in autonomous mode
         '''
         self.motor.set(.75)
         self.motor2.set(.3)
@@ -30,13 +30,40 @@ class MyRobot(wpilib.IterativeRobot):
         pass
     
     def teleopPeriodic(self):
-        #
         pass
     
-    
 
-    
 if __name__ == "__main__":
     wpilib.run(MyRobot)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
