@@ -2,6 +2,7 @@
     This is the main robot file 
 '''
 import wpilib
+from components.drive import Drive
 
 class MyRobot(wpilib.IterativeRobot):
     
@@ -9,6 +10,24 @@ class MyRobot(wpilib.IterativeRobot):
         '''
             Initialize robot components here
         '''
+        #
+        # all ports relate to PWM ports
+        #
+        self.lf_motor = wpilib.TalonSRX(1)
+        self.lb_motor = wpilib.TalonSRX(3)
+        self.rf_motor = wpilib.TalonSRX(2)
+        self.rb_motor = wpilib.TalonSRX(4)
+        
+        #
+        # all ports relate to analog input
+        #
+        self.gyro = wpilib.Gyro(1)
+        
+        #
+        # creates an instance of the Drive component
+        #
+        self.robot_drive = Drive(self.lf_motor, self.lb_motor, self.rf_motor, self.rb_motor)
+        
         
         #
         # This dictionary contains a reference of all components every component
