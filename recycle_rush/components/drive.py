@@ -45,7 +45,7 @@ class Drive(object):
         
     def get_angle_difference(self, target, source):
         # target> angle you want; source> the gyro angle
-        return (target - source + math.pi) % (math.pi * 2) + math.pi
+        return (target - source + math.pi) % (math.pi * 2) - math.pi
     
     def run(self):
         '''
