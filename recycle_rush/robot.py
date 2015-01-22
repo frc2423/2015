@@ -2,7 +2,8 @@
     This is the main robot file 
 '''
 import wpilib
-from components.drive import Drive
+from subsystems.drive import Drive
+from subsystems.grabber_lift import GrabberLift
 
 class MyRobot(wpilib.IterativeRobot):
     
@@ -24,23 +25,24 @@ class MyRobot(wpilib.IterativeRobot):
         #
         self.gyro = wpilib.Gyro(1)
         
-        
-        #
-        # initialize all components
-        #
-        self.robot_drive = Drive(self.lf_motor, self.lb_motor, self.rf_motor, self.rb_motor)
         #
         # all ports/channels related to digital output
         #
         self.grabber = wpilib.DoubleSolenoid(0, 1)
         
+        
+        #
+        # initialize all subsystems
+        #
+        self.robot_drive = Drive(self.lf_motor, self.lb_motor, self.rf_motor, self.rb_motor)
+        self.grabber_lift = GrabberLift(self.lift_motor, self.grabber, None)
+       
+        
         #
         # This dictionary contains a reference of all 
         # components every component all components must have a run function
         #
-        self.component_dict = {
-                               
-                               }
+        self.component_dict = {}
         
     def autonomousInit(self):
         '''
@@ -70,8 +72,4 @@ class MyRobot(wpilib.IterativeRobot):
         pass
     
     
-    def run(self):
-        
-        for v in self.component_dict.values():
-            v.run()
         

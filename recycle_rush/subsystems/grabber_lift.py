@@ -3,9 +3,10 @@ Created on Jan 19, 2015
 @author: Taylor
 '''
 import wpilib
+from wpilib.command import Subsystem
 
 
-class GrabberLift():
+class GrabberLift(Subsystem):
     '''
         Used to mobilize grabby thing and lift up the item
         grabbied

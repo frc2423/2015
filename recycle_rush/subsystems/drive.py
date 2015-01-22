@@ -1,16 +1,17 @@
 import wpilib
+from wpilib.command import Subsystem
 import math
 
-class Drive(object): 
+class Drive(Subsystem): 
     '''
         The drive object is used to move our robot with a
         mecanum drive. It uses a gyro to help achieve a more
         precise angle measure
     '''
     
-    kP = .5
-    kI = .01
-    kD = .0
+    kP_rotate = .5
+    kI_rotate = .01
+    kD_rotate = .0
     
     
     def __init__(self, lf_motor, lb_motor, rf_motor, rb_motor, gyro):
@@ -26,7 +27,12 @@ class Drive(object):
         self.rb_motor = rb_motor
         self.gyro = gyro
         
-        self.gyro_pid = wpilib.PIDController(Drive.kP, Drive.kI, Drive.kD, self.pid_source, self.pid_output)
+        self.gyro_pid = wpilib.PIDController(
+             Drive.kP_rotate, 
+             Drive.kI_rotate, 
+             Drive.kD_rotate, 
+             self.pid_source, 
+             self.pid_output)
         
         
     def pid_source(self):
@@ -62,10 +68,3 @@ class Drive(object):
         # target> angle you want; source> the gyro angle
         return (target - source + math.pi) % (math.pi * 2) - math.pi
     
-    def run(self):
-        '''
-            This runs the changes that are made above
-            could also be called "def update(self):"
-        '''
-        
-        pass
