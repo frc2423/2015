@@ -8,6 +8,11 @@ class Drive(object):
         precise angle measure
     '''
     
+    kP = .5
+    kI = .01
+    kD = .0
+    
+    
     def __init__(self, lf_motor, lb_motor, rf_motor, rb_motor, gyro):
         '''
             constructor for the drive object. Should take in
@@ -20,6 +25,16 @@ class Drive(object):
         self.rf_motor = rf_motor
         self.rb_motor = rb_motor
         self.gyro = gyro
+        
+        self.gyro_pid = wpilib.PIDController(Drive.kP, Drive.kI, Drive.kD, self.pid_source, self.pid_output)
+        
+        
+    def pid_source(self):
+        return self.get_angle_difference(self.gyro_pid.getSetpoint(), self.gyro.getAngle())
+    
+    def pid_output(self, output):
+        self.robot_move(0, 0, output, 0)
+    
     
     def robot_move(self, x, y, z, angle):
         '''
