@@ -14,7 +14,12 @@ class GrabberLift(Subsystem):
     kForward = wpilib.DoubleSolenoid.Value.kForward
     kOff = wpilib.DoubleSolenoid.Value.kOff
     kReverse = wpilib.DoubleSolenoid.Value.kReverse
-    
+    kPercentVbus = wpilib.CANTalon.ControlMode.PercentVbus
+    kPostion = wpilib.CANTalon.ControlMode.Position
+    kAnalogPot = wpilib.CANTalon.FeedbackDevice.AnalogPot
+    kP = .5
+    kI = .001
+    kD = 0
     
     def __init__(self, lift_motor, grabber, box_sensor):
         '''
@@ -25,6 +30,8 @@ class GrabberLift(Subsystem):
         self.grabber = grabber
         self.box_sensor = box_sensor
         self.pid_controller = wpilib.PIDController
+        self.lift_motor.setFeedbackDevice(GrabberLift.kAnalogPot)
+        self.lift_motor.setPID(GrabberLift.kP, GrabberLift.kI,GrabberLift.kD)
         
     def clamp(self):
         '''
@@ -42,11 +49,20 @@ class GrabberLift(Subsystem):
         '''
             Moves lifter based off direct input to motor
         '''
+        self.set_mode(GrabberLift.kPercentVbus)
         self.lift_motor.set(speed)
         
     def move_to_position(self, position):
         ''' 
             Moves lifter to a specified position
+        '''
+        self.set_mode(GrabberLift.kPostion)
+        self.lift_motor.set(position)
+        
+    def is_at_position(self,position):
+        '''
+            compares the actual position of robot to current
+            position of the robot
         '''
         pass
     
@@ -54,12 +70,12 @@ class GrabberLift(Subsystem):
         '''
             Changes lift motor to different modes
         '''
-        pass
+        self.lift_motor.changeControlMode(mode)
     
     def get_mode (self):
         '''
             Gets the mode the lift motor is in
         '''
-        pass
+        return self.lift_motor.getControlMode()
         
     
