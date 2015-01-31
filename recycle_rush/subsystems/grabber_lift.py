@@ -5,7 +5,6 @@ Created on Jan 19, 2015
 import wpilib
 from wpilib.command import Subsystem
 
-
 class GrabberLift(Subsystem):
     '''
         Used to mobilize grabby thing and lift up the item
