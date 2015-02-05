@@ -12,9 +12,9 @@ class MoveLift(Command):
         '''
             Raises lift using manual control
             :param grabber_lift: subsystem of GrabberLift
-            Default command. We don't think we want it to be finished. EVER.
-        
             :param value: value should be either a function that returns between -1 to 1 or a number between -1 to 1
+            
+            Default command. We don't think we want it to be finished. EVER.
         '''
         super().__init__()
         self.setInterruptible(True)
@@ -55,15 +55,19 @@ class MoveLift(Command):
             self.grabber_lift.move_lifter(self.param)
         
     def isFinished(self):
-        ''' Make this return true when this Command no longer needs to run execute()'''
+        '''
+            Make this return true when this Command no longer needs to run execute()
+        '''
         return False
     
     def end(self):
         pass
     
     def interrupted(self):
-        '''Called when another command which requires one or more of the same
-           subsystems is scheduled to run. Stops lift motor.'''
+        '''
+            Called when another command which requires one or more of the same
+            subsystems is scheduled to run. Stops lift motor.
+        '''
         
         self.grabber_lift.move_lifter(0)
         
