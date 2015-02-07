@@ -1,0 +1,6 @@
+# compiled files
+__pycache__/
+*.py[cod]
+
+recycle_rush/
+*.pydevproject
