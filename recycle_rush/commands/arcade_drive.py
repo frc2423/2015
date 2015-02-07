@@ -1,5 +1,5 @@
 '''
-    Created on Jan 31, 2015
+    Created on Feb 5, 2015
     @author: Taylor
 '''
 
@@ -7,28 +7,21 @@ import wpilib
 from wpilib.command import Command
 from subsystems.drive import Drive
 
-class MecanumDrive(Command):
+class ArcadeDrive(Command):
     '''
         Used to move the robot
     '''
-    def __init__(self, drive, joystick, gyro = None, get_z = None):
+    def __init__(self, drive, joystick):
         
         
         '''
-            initializes mecanum drive movement.
+            initializes arcade drive movement
             :param joystick : the primary controls for controlling the robot
-            :param gyro: Used to compare robot's angle to the gyro's 0 angle,
-            moves relative to the field if gyro is passed in. 
-            :param get_z: Used to get the z angle, function that determines 
-            rotation and direction of rotation. Z value must be given if it
-            separate from the joystick. 
         '''
         super().__init__()
         
         self.drive = drive
         self.joystick = joystick
-        self.gyro = gyro
-        self.get_z = get_z
         
     def initialize(self):
         '''
@@ -40,9 +33,8 @@ class MecanumDrive(Command):
             Called repeatedly when this Command is scheduled
             to run
         '''
-        z = self.joystick.getZ() if self.get_z == None else self.get_z()
-        angle = self.gyro.getAngle() if self.gyro != None else 0
-        self.drive.robot_move(self.joystick.getX(), self.joystick.getY(), z , angle)
+        self.drive.robot_move(0, self.joystick.getY(), self.joystick.getX(), 0)
+        
         
     def isFinished(self):
         '''

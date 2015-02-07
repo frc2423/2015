@@ -5,6 +5,7 @@
 
 from wpilib.command import Command
 from subsystems.grabber_lift import GrabberLift
+import wpilib
 
 class MoveLift(Command):
     
