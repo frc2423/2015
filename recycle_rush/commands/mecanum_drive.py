@@ -24,9 +24,11 @@ class MecanumDrive(Command):
         super().__init__()
         
         self.drive = drive
-        self.joystick = joystick
-        self.gyro = gyro
+        self.get_x = get_x
+        self.get_y = get_y
         self.get_z = get_z
+        self.gyro = gyro
+        self.requires(Drive)
         
     def initialize(self):
         '''
@@ -38,9 +40,8 @@ class MecanumDrive(Command):
             Called repeatedly when this Command is scheduled
             to run
         '''
-        z = self.joystick.getZ() if self.get_z == None else self.get_z()
         angle = self.gyro.getAngle() if self.gyro != None else 0
-        self.drive.robot_move(self.joystick.getX(), self.joystick.getY(), z , angle)
+        self.drive.robot_move(self.get_x, self.get_y, self.get_z, angle)
         
     def isFinished(self):
         '''
