@@ -2,7 +2,6 @@
     Created on Feb 5, 2015
     @author: Taylor
 '''
-
 import wpilib
 from wpilib.command import Command
 from subsystems.drive import Drive
@@ -11,7 +10,7 @@ class ArcadeDrive(Command):
     '''
         Used to move the robot
     '''
-    def __init__(self, drive, joystick):
+    def __init__(self, drive, get_x, get_y):
         
         
         '''
@@ -21,7 +20,9 @@ class ArcadeDrive(Command):
         super().__init__()
         
         self.drive = drive
-        self.joystick = joystick
+        self.get_x = get_x
+        self.get_y = get_y
+        self.requires(Drive)
         
    
     def execute(self):
@@ -29,7 +30,7 @@ class ArcadeDrive(Command):
             Called repeatedly when this Command is scheduled
             to run
         '''
-        self.drive.robot_move(0, self.joystick.getY(), self.joystick.getX(), 0)
+        self.drive.robot_move(0, self.get_y, self.get_x, 0)
         
         
     def isFinished(self):

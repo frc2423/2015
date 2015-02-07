@@ -18,7 +18,6 @@ class MoveLift(Command):
             Default command. We don't think we want it to be finished. EVER.
         '''
         super().__init__()
-        self.setInterruptible(True)
         self.grabber_lift = grabber_lift
         self.requires(GrabberLift)
         
