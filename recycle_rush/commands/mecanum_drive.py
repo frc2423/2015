@@ -11,9 +11,7 @@ class MecanumDrive(Command):
     '''
         Used to move the robot
     '''
-    def __init__(self, drive, joystick, gyro = None, get_z = None):
-        
-        
+    def __init__(self, drive, get_x, get_y, get_z, gyro = None):
         '''
             initializes mecanum drive movement.
             :param joystick : the primary controls for controlling the robot
@@ -61,3 +59,4 @@ class MecanumDrive(Command):
             more of the same subsystems is scheduled to run
         '''
         self.drive.robot_move (0,0,0,0)
+        

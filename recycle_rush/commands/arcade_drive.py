@@ -23,11 +23,7 @@ class ArcadeDrive(Command):
         self.drive = drive
         self.joystick = joystick
         
-    def initialize(self):
-        '''
-            Called just before this Command runs the first time
-        '''
-        pass
+   
     def execute(self):
         '''
             Called repeatedly when this Command is scheduled
@@ -42,11 +38,7 @@ class ArcadeDrive(Command):
             needs to run execute()
         '''
         return False
-    def end(self):
-        '''
-            Called once after isFinished returns true
-        '''
-        pass
+   
     def interrupted(self):
         '''
             Called when another command which requires one or
