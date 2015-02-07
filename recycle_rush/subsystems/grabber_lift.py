@@ -28,7 +28,6 @@ class GrabberLift(Subsystem):
         self.lift_motor = lift_motor
         self.grabber = grabber
         self.box_sensor = box_sensor
-        self.pid_controller = wpilib.PIDController
         self.lift_motor.setFeedbackDevice(GrabberLift.kAnalogPot)
         self.lift_motor.setPID(GrabberLift.kP, GrabberLift.kI,GrabberLift.kD)
         
