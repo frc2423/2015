@@ -14,7 +14,7 @@ class Drive(Subsystem):
     kD_rotate = .0
     
     
-    def __init__(self, lf_motor, lb_motor, rf_motor, rb_motor, gyro):
+    def __init__(self, lf_motor, lb_motor, rf_motor, rb_motor, gyro, accel):
         '''
             constructor for the drive object. Should take in
             gyro and a mecanum drive.
@@ -26,6 +26,8 @@ class Drive(Subsystem):
         self.rf_motor = rf_motor
         self.rb_motor = rb_motor
         self.gyro = gyro
+        self.accel = accel 
+        
         
         self.gyro_pid = wpilib.PIDController(
              Drive.kP_rotate, 
@@ -67,4 +69,13 @@ class Drive(Subsystem):
     def get_angle_difference(self, target, source):
         # target> angle you want; source> the gyro angle
         return (target - source + math.pi) % (math.pi * 2) - math.pi
+    
+    def log(self):
+        '''
+            log records various things about the robot
+        '''
+        wpilib.SmartDashboard.putData("angle", self.gyro.getAngle())
+        wpilib.SmartDashboard.putData("acceleration_x", self.accel.getX())
+        wpilib.SmartDashboard.putData("acceleration_y", self.accel.getY())
+        wpilib.SmartDashboard.putData("acceleration_z", self.accel.getZ())
     

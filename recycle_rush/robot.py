@@ -4,7 +4,7 @@
 import wpilib
 from subsystems.drive import Drive
 from subsystems.grabber_lift import GrabberLift
-
+from wpilib.command import Scheduler
 class MyRobot(wpilib.IterativeRobot):
     
     def robotInit(self):
@@ -30,13 +30,16 @@ class MyRobot(wpilib.IterativeRobot):
         #
         self.grabber = wpilib.DoubleSolenoid(0, 1)
         
+        #
+        # built-in sensors
+        #
+        self.accel = wpilib.BuiltInAccelerometer()
         
         #
         # initialize all subsystems
         #
         self.robot_drive = Drive(self.lf_motor, self.lb_motor, self.rf_motor, self.rb_motor)
         self.grabber_lift = GrabberLift(self.lift_motor, self.grabber, None)
-       
         
         #
         # This dictionary contains a reference of all 
@@ -56,20 +59,36 @@ class MyRobot(wpilib.IterativeRobot):
             This should call all autonomous based commands run must be called at
             the end of this function
         '''
-        pass
+        Scheduler.getInstance().run()
+        self.log()
     
     def teleopInit(self):
         '''
             get the robot ready for teleop mode
         '''
+        
+        
         pass
     
     def teleopPeriodic(self):
+           
         '''
             Periodically called to run our telop code run must be called at the 
             end of this function
         '''
-        pass
+        Scheduler.getInstance().run()
+        self.log()
+        
+    def log(self):
+        '''
+            Calls the log function in the drive subsystem
+        '''
+        self.robot_drive.log()
+        
+
+if __name__ == '__main__':
+    wpilib.run(MyRobot)
+        
     
     
         
