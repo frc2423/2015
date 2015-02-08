@@ -28,20 +28,17 @@ class Drive(Subsystem):
         self.gyro = gyro
         self.accel = accel 
         
-        
+        '''
         self.gyro_pid = wpilib.PIDController(
              Drive.kP_rotate, 
              Drive.kI_rotate, 
              Drive.kD_rotate, 
-             self.pid_source, 
+             self.gyro, 
              self.pid_output)
-        
-        
-    def pid_source(self):
-        return self.get_angle_difference(self.gyro_pid.getSetpoint(), self.gyro.getAngle())
+        '''
     
     def pid_output(self, output):
-        self.robot_move(0, 0, output, 0)
+        self.robot_drive.mecanumDrive_Cartesian(0, 0, output, 0)
     
     
     def robot_move(self, x, y, z, angle):
@@ -49,6 +46,7 @@ class Drive(Subsystem):
             this function is used to control the
             power/speed/torque of our robot/drive/motors
         '''
+        #self.gyro_pid.disable()
         self.robot_drive.mecanumDrive_Cartesian(x, y, z, angle)
         
     def robot_rotate(self, angle):
@@ -56,15 +54,8 @@ class Drive(Subsystem):
             rotate to a certain angle within a specified set
             of parameters
         '''
-        
-        angle_difference = self.get_angle_difference(angle, self.gyro.getAngle())
-        z = 0
-        if angle_difference < -5:
-            z = -.5
-        elif angle_difference > 5:
-            z = .5
-        
-        self.robot_move(0, 0, z, angle)
+        #self.gyro_pid.enable()
+        #self.gyro_pid.setSetpoint(angle)
         
     def get_angle_difference(self, target, source):
         # target> angle you want; source> the gyro angle
@@ -74,8 +65,8 @@ class Drive(Subsystem):
         '''
             log records various things about the robot
         '''
-        wpilib.SmartDashboard.putData("angle", self.gyro.getAngle())
-        wpilib.SmartDashboard.putData("acceleration_x", self.accel.getX())
-        wpilib.SmartDashboard.putData("acceleration_y", self.accel.getY())
-        wpilib.SmartDashboard.putData("acceleration_z", self.accel.getZ())
+        wpilib.SmartDashboard.putNumber("angle", self.gyro.getAngle())
+        wpilib.SmartDashboard.putNumber("acceleration_x", self.accel.getX())
+        wpilib.SmartDashboard.putNumber("acceleration_y", self.accel.getY())
+        wpilib.SmartDashboard.putNumber("acceleration_z", self.accel.getZ())
     

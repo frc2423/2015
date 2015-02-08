@@ -11,12 +11,10 @@ from commands.claw_release import ClawRelease
 from commands.claw_grab import ClawGrab
 from commands.mecanum_drive import MecanumDrive
 
-class IO:
+class OI:
     def __init__ (self, grabber_lift, drive):
         self.joy = Joystick(0)
         self.drive = drive
-        
-        joy = self.joy
         
         #Create buttons
         raise_lift = JoystickButton(self.joy, lc.L_BUMPER)
