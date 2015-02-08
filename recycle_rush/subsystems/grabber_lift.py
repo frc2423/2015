@@ -76,4 +76,11 @@ class GrabberLift(Subsystem):
         '''
         return self.lift_motor.getControlMode()
         
+        
+    def log(self):
+        '''
+            
+        '''
+        wpilib.SmartDashboard.putNumber('lift_position', 
+                                        self.lift_motor.getAnalogInPosition())
     

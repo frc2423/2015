@@ -14,11 +14,11 @@ class MyRobot(wpilib.IterativeRobot):
         #
         # all ports relate to PWM ports
         #
-        self.lf_motor = wpilib.TalonSRX(1)
-        self.lb_motor = wpilib.TalonSRX(3)
-        self.rf_motor = wpilib.TalonSRX(2)
-        self.rb_motor = wpilib.TalonSRX(4)
-        self.lift_motor = wpilib.TalonSRX(5)
+        self.lf_motor = wpilib.CANTalon(1)
+        self.lb_motor = wpilib.CANTalon(3)
+        self.rf_motor = wpilib.CANTalon(2)
+        self.rb_motor = wpilib.CANTalon(4)
+        self.lift_motor = wpilib.CANTalon(5)
         
         #
         # all ports relate to analog input
@@ -38,7 +38,7 @@ class MyRobot(wpilib.IterativeRobot):
         #
         # initialize all subsystems
         #
-        self.robot_drive = Drive(self.lf_motor, self.lb_motor, self.rf_motor, self.rb_motor)
+        self.robot_drive = Drive(self.lf_motor, self.lb_motor, self.rf_motor, self.rb_motor, self.gyro, self.accel)
         self.grabber_lift = GrabberLift(self.lift_motor, self.grabber, None)
         
         #
@@ -76,7 +76,7 @@ class MyRobot(wpilib.IterativeRobot):
             Periodically called to run our telop code run must be called at the 
             end of this function
         '''
-        Scheduler.getInstance().run()
+        #Scheduler.getInstance().run()
         self.log()
         
     def log(self):
@@ -84,6 +84,7 @@ class MyRobot(wpilib.IterativeRobot):
             Calls the log function in the drive subsystem
         '''
         self.robot_drive.log()
+        self.grabber_lift.log()
         
 
 if __name__ == '__main__':
