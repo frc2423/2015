@@ -1,6 +1,7 @@
 import wpilib
 from wpilib.command import Subsystem
 import math
+import sys
 
 class Drive(Subsystem): 
     '''
@@ -13,12 +14,12 @@ class Drive(Subsystem):
     kI_rotate = .01
     kD_rotate = .0
     
-    
     def __init__(self, lf_motor, lb_motor, rf_motor, rb_motor, gyro, accel):
         '''
             constructor for the drive object. Should take in
             gyro and a mecanum drive.
         '''
+        super().__init__()
         self.robot_drive = wpilib.RobotDrive(lf_motor, lb_motor, rf_motor, rb_motor)
         
         self.lf_motor = lf_motor
@@ -28,15 +29,29 @@ class Drive(Subsystem):
         self.gyro = gyro
         self.accel = accel 
         
-        '''
-        self.gyro_pid = wpilib.PIDController(
-             Drive.kP_rotate, 
-             Drive.kI_rotate, 
-             Drive.kD_rotate, 
-             self.gyro, 
-             self.pid_output)
-        '''
+        print('entering PIDController init')
+#         self.gyro_pid = wpilib.PIDController(
+#              Drive.kP_rotate, 
+#              Drive.kI_rotate, 
+#              Drive.kD_rotate, 
+#              self.gyro, 
+#              self.rb_motor)
+#         
+#         # we are using a continuous sensor here 
+#         self.gyro_pid.setContinuous()
+#         
+#         # sets input range from zero to 360, dont know if that is right just yet
+#         # todo testing for correctness
+#         self.gyro_pid.setInputRange(0, 360)
+#         
+#         # output normilized to motor settings
+#         self.gyro_pid.setOutputRange(-1, 1)
+#         
+#         # percent tolerance for now is 5% should probably be a lot less
+#         self.gyro_pid.setPercentTolerance(5)
+#         
     
+        
     def pid_output(self, output):
         self.robot_drive.mecanumDrive_Cartesian(0, 0, output, 0)
     

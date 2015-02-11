@@ -5,6 +5,9 @@ import wpilib
 from subsystems.drive import Drive
 from subsystems.grabber_lift import GrabberLift
 from wpilib.command import Scheduler
+from oi import OI
+from common import port_values as pv
+
 class MyRobot(wpilib.IterativeRobot):
     
     def robotInit(self):
@@ -14,21 +17,26 @@ class MyRobot(wpilib.IterativeRobot):
         #
         # all ports relate to PWM ports
         #
-        self.lf_motor = wpilib.CANTalon(1)
-        self.lb_motor = wpilib.CANTalon(3)
-        self.rf_motor = wpilib.CANTalon(2)
-        self.rb_motor = wpilib.CANTalon(4)
-        self.lift_motor = wpilib.CANTalon(5)
-        
+        self.lf_motor          = wpilib.CANTalon(pv.CAN_LIFT_TALON_FL)
+        self.lb_motor          = wpilib.CANTalon(pv.CAN_LIFT_TALON_BL)
+        self.rf_motor          = wpilib.CANTalon(pv.CAN_LIFT_TALON_FR)
+        self.rb_motor          = wpilib.CANTalon(pv.CAN_LIFT_TALON_BR)
+        self.lift_motor_master = wpilib.CANTalon(pv.CAN_LIFT_TALON_MASTER)
+        self.lift_motor_slave  = wpilib.CANTalon(pv.CAN_LIFT_TALON_SLAVE)
         #
         # all ports relate to analog input
         #
-        self.gyro = wpilib.Gyro(1)
+        self.gyro = wpilib.Gyro(pv.AI_GIRO)
         
         #
-        # all ports/channels related to digital output
+        # all ports relate to digital input
         #
-        self.grabber = wpilib.DoubleSolenoid(0, 1)
+        self.box_sensor = wpilib.DigitalInput(pv.DIO_BOX_SENSOR)
+        
+        #
+        # all ports/channels related to solenoid ports
+        #
+        self.grabber = wpilib.DoubleSolenoid(pv.SOLENOID_0, pv.SOLENOID_1)
         
         #
         # built-in sensors
@@ -39,7 +47,12 @@ class MyRobot(wpilib.IterativeRobot):
         # initialize all subsystems
         #
         self.robot_drive = Drive(self.lf_motor, self.lb_motor, self.rf_motor, self.rb_motor, self.gyro, self.accel)
-        self.grabber_lift = GrabberLift(self.lift_motor, self.grabber, None)
+        self.grabber_lift = GrabberLift(self.lift_motor_master, self.lift_motor_slave, self.grabber, self.box_sensor)
+        
+        #
+        # create OI
+        #
+        self.oi = OI(self.grabber_lift, self.robot_drive)
         
         #
         # This dictionary contains a reference of all 
@@ -76,7 +89,7 @@ class MyRobot(wpilib.IterativeRobot):
             Periodically called to run our telop code run must be called at the 
             end of this function
         '''
-        #Scheduler.getInstance().run()
+        Scheduler.getInstance().run()
         self.log()
         
     def log(self):

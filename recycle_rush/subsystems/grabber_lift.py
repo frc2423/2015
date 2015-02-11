@@ -12,25 +12,37 @@ class GrabberLift(Subsystem):
     '''    
     kForward = wpilib.DoubleSolenoid.Value.kForward
     kOff = wpilib.DoubleSolenoid.Value.kOff
-    kReverse = wpilib.DoubleSolenoid.Value.kReverse
-    kPercentVbus = wpilib.CANTalon.ControlMode.PercentVbus
-    kPostion = wpilib.CANTalon.ControlMode.Position
+    kReverse = wpilib.DoubleSolenoid.Value.kReverse    
     kAnalogPot = wpilib.CANTalon.FeedbackDevice.AnalogPot
+    
+    mPercentVbus = wpilib.CANTalon.ControlMode.PercentVbus
+    mPostion     = wpilib.CANTalon.ControlMode.Position
+    mFollower    = wpilib.CANTalon.ControlMode.Follower
+    
     kP = .5
     kI = .001
     kD = 0
     
-    def __init__(self, lift_motor, grabber, box_sensor):
+    def __init__(self, motor_master, motor_slave, grabber, box_sensor):
         '''
             constructor for the GrabberLift object. Should take
             a talon and a solenoid.
         '''
-        self.lift_motor = lift_motor
+        super().__init__()
+        self.motor_master = motor_master
+        self.motor_slave  = motor_slave 
         self.grabber = grabber
         self.box_sensor = box_sensor
-        self.lift_motor.setFeedbackDevice(GrabberLift.kAnalogPot)
-        self.lift_motor.setPID(GrabberLift.kP, GrabberLift.kI,GrabberLift.kD)
         
+        # set master control mode
+        self.motor_master.setFeedbackDevice(GrabberLift.kAnalogPot)
+        self.motor_master.setPID(GrabberLift.kP, GrabberLift.kI,GrabberLift.kD)
+        
+        # set slave control mode - the salve is ALWAYS a slave to the master no
+        # no matter the mode of the master
+        self.motor_slave.changeControlMode(GrabberLift.mFollower)
+        #set slave to follow master commands
+        self.motor_slave.set(self.motor_master.getDeviceID())
     def clamp(self):
         '''
             Grabber arm clamps so it can hold totes/bins.
@@ -47,15 +59,15 @@ class GrabberLift(Subsystem):
         '''
             Moves lifter based off direct input to motor
         '''
-        self.set_mode(GrabberLift.kPercentVbus)
-        self.lift_motor.set(speed)
+        self.set_mode(GrabberLift.mPercentVbus)
+        self.motor_master.set(speed)
         
     def move_to_position(self, position):
         ''' 
             Moves lifter to a specified position
         '''
-        self.set_mode(GrabberLift.kPostion)
-        self.lift_motor.set(position)
+        self.set_mode(GrabberLift.mPostion)
+        self.motor_master.set(position)
         
     def is_at_position(self,position):
         '''
@@ -68,13 +80,13 @@ class GrabberLift(Subsystem):
         '''
             Changes lift motor to different modes
         '''
-        self.lift_motor.changeControlMode(mode)
+        self.motor_master.changeControlMode(mode)
     
     def get_mode (self):
         '''
             Gets the mode the lift motor is in
         '''
-        return self.lift_motor.getControlMode()
+        return self.motor_master.getControlMode()
         
         
     def log(self):
@@ -82,5 +94,5 @@ class GrabberLift(Subsystem):
             
         '''
         wpilib.SmartDashboard.putNumber('lift_position', 
-                                        self.lift_motor.getAnalogInPosition())
+                                        self.motor_master.getAnalogInPosition())
     

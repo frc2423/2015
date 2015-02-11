@@ -3,9 +3,7 @@
     @author: Taylor
 '''
 
-import wpilib
 from wpilib.command import Command
-from subsystems.drive import Drive
 
 class MecanumDrive(Command):
     '''
@@ -22,19 +20,18 @@ class MecanumDrive(Command):
             separate from the joystick. 
         '''
         super().__init__()
-        
         self.drive = drive
         self.get_x = get_x
         self.get_y = get_y
         self.get_z = get_z
         self.gyro = gyro
-        self.requires(Drive)
-        
+        self.requires(drive)
+
     def initialize(self):
         '''
             Called just before this Command runs the first time
         '''
-        pass
+
     def execute(self):
         '''
             Called repeatedly when this Command is scheduled
@@ -42,13 +39,14 @@ class MecanumDrive(Command):
         '''
         angle = self.gyro.getAngle() if self.gyro != None else 0
         self.drive.robot_move(self.get_x, self.get_y, self.get_z, angle)
-        
+
     def isFinished(self):
         '''
             Make this return true when this Command no longer
             needs to run execute()
         '''
         return False
+    
     def end(self):
         '''
             Called once after isFinished returns true
