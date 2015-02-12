@@ -124,6 +124,26 @@ class GrabberLift(Subsystem):
         return self.mode
         
         
+    def update_pid(self, p = None, i = None, d = None):
+        '''
+            Updates the PID coefficients
+        '''
+        
+        if p: 
+            self.p = p
+            self.motor_master.setP(p)
+            
+        if i: 
+            self.i = i
+            self.motor_master.setI(i)
+            
+        if d: 
+            self.d = d
+            self.motor_master.setD(d)
+        
+        
+        
+        
     def log(self):
         '''
             
