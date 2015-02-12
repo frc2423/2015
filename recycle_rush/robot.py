@@ -46,8 +46,23 @@ class MyRobot(wpilib.IterativeRobot):
         #
         # initialize all subsystems
         #
-        self.robot_drive = Drive(self.lf_motor, self.lb_motor, self.rf_motor, self.rb_motor, self.gyro, self.accel)
-        self.grabber_lift = GrabberLift(self.lift_motor_master, self.lift_motor_slave, self.grabber, self.box_sensor)
+        self.robot_drive = Drive(self.lf_motor, 
+                                 self.lb_motor, 
+                                 self.rf_motor, 
+                                 self.rb_motor, 
+                                 self.gyro, 
+                                 self.accel,
+                                 wpilib.SmartDashboard.getNumber('drive_p', Drive.kP_default),
+                                 wpilib.SmartDashboard.getNumber('drive_i', Drive.kI_default),
+                                 wpilib.SmartDashboard.getNumber('drive_d', Drive.kD_default))
+        
+        self.grabber_lift = GrabberLift(self.lift_motor_master, 
+                                        self.lift_motor_slave, 
+                                        self.grabber, 
+                                        self.box_sensor,
+                                        wpilib.SmartDashboard.getNumber('lift_p', GrabberLift.kP_default),
+                                        wpilib.SmartDashboard.getNumber('lift_i', GrabberLift.kI_default),
+                                        wpilib.SmartDashboard.getNumber('lift_d', GrabberLift.kD_default))
         
         #
         # create OI

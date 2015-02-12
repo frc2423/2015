@@ -10,11 +10,20 @@ class Drive(Subsystem):
         precise angle measure
     '''
     
-    kP_rotate = .5
-    kI_rotate = .01
-    kD_rotate = .0
+    kP_default = .5
+    kI_default = .01
+    kD_default = .0
     
-    def __init__(self, lf_motor, lb_motor, rf_motor, rb_motor, gyro, accel):
+    def __init__(self, 
+                 lf_motor, 
+                 lb_motor, 
+                 rf_motor, 
+                 rb_motor, 
+                 gyro, 
+                 accel,
+                 p = kP_default,
+                 i = kP_default,
+                 d = kP_default):
         '''
             constructor for the drive object. Should take in
             gyro and a mecanum drive.
@@ -28,14 +37,12 @@ class Drive(Subsystem):
         self.rb_motor = rb_motor
         self.gyro = gyro
         self.accel = accel 
+        self.p = p
+        self.i = i
+        self.d = d
         
         print('entering PIDController init')
-#         self.gyro_pid = wpilib.PIDController(
-#              Drive.kP_rotate, 
-#              Drive.kI_rotate, 
-#              Drive.kD_rotate, 
-#              self.gyro, 
-#              self.rb_motor)
+#         self.gyro_pid = wpilib.PIDController(p, i, d, self.gyro, self.rb_motor)
 #         
 #         # we are using a continuous sensor here 
 #         self.gyro_pid.setContinuous()

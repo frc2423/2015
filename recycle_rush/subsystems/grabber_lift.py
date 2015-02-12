@@ -19,6 +19,10 @@ class GrabberLift(Subsystem):
     mPostion     = wpilib.CANTalon.ControlMode.Position
     mFollower    = wpilib.CANTalon.ControlMode.Follower
     
+    kP_default = .5
+    kI_default = 0
+    kD_default = 0
+    
     #
     # map used for printing the control mode
     #
@@ -26,7 +30,15 @@ class GrabberLift(Subsystem):
                             mPercentVbus:'mPerscentVbus',
                             mPostion:'mPosition',
                        }
-    def __init__(self, motor_master, motor_slave, grabber, box_sensor, p, i, d):
+    def __init__(self, 
+                 motor_master, 
+                 motor_slave, 
+                 grabber, 
+                 box_sensor, 
+                 p = kP_default, 
+                 i = kI_default, 
+                 d = kD_default):
+        
         '''
             constructor for the GrabberLift object. Should take
             a talon and a solenoid.
@@ -63,15 +75,6 @@ class GrabberLift(Subsystem):
         #set slave to follow master commands
         self.motor_slave.set(self.motor_master.getDeviceID())
         
-        #
-        # put PID data on dashboard, the robot should not update this again
-        #
-        
-        wpilib.SmartDashboard.putNumber('lift_p', self.p)
-        
-        wpilib.SmartDashboard.putNumber('lift_i', self.i)
-        
-        wpilib.SmartDashboard.putNumber('lift_d', self.d)
         
     def clamp(self):
         '''
@@ -132,7 +135,7 @@ class GrabberLift(Subsystem):
         
         wpilib.SmartDashboard.putNumber('lift_error', self.motor_master.getClosedLoopError() if self.mode == GrabberLift.mPostion  else 0)
         
-        wpilib.SmartDashboard.putNumber('lift_position', self.motor.getAnalogInRaw())
+        wpilib.SmartDashboard.putNumber('lift_position', self.motor_master.getAnalogInRaw())
         
         wpilib.SmartDashboard.putString('lift_mode', GrabberLift.control_mode_map[self.mode])
     
