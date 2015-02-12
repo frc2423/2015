@@ -55,6 +55,13 @@ class MyRobot(wpilib.IterativeRobot):
         self.oi = OI(self.grabber_lift, self.robot_drive)
         
         #
+        # timer 
+        #
+        self.timer = wpilib.Timer()
+        self.timer_delay = 1
+        self.log()
+        
+        #
         # This dictionary contains a reference of all 
         # components every component all components must have a run function
         #
@@ -65,7 +72,7 @@ class MyRobot(wpilib.IterativeRobot):
             function initializes our autonomous modes, we may
             have more than one
         '''
-        pass
+        self.timer.start()
     
     def autonomousPeriodic(self):
         '''
@@ -79,9 +86,7 @@ class MyRobot(wpilib.IterativeRobot):
         '''
             get the robot ready for teleop mode
         '''
-        
-        
-        pass
+        self.timer.reset()
     
     def teleopPeriodic(self):
            
@@ -94,8 +99,21 @@ class MyRobot(wpilib.IterativeRobot):
         
     def log(self):
         '''
-            Calls the log function in the drive subsystem
+            Calls the log function in the drive subsystem if timer is on then
+            will only print when the timer has passed timer delay timer its
+            the timer must be running so that we do not flood the rio and 
+            network with messages
         '''
+        #
+        # check if the timer is running, if it is running and the period has 
+        # not passed return
+        #
+        if self.timer.running:
+            if not self.timer.hasPeriodPassed(self.timer_delay):
+                return
+            else:
+                self.timer.reset()
+            
         self.robot_drive.log()
         self.grabber_lift.log()
         
