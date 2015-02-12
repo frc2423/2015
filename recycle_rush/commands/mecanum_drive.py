@@ -12,9 +12,9 @@ class MecanumDrive(Command):
     def __init__(self, drive, get_x, get_y, get_z, gyro = None):
         '''
             initializes mecanum drive movement.
-            :param joystick : the primary controls for controlling the robot
-            :param gyro: Used to compare robot's angle to the gyro's 0 angle,
-            moves relative to the field if gyro is passed in. 
+            :param drive : the drive subsystem
+            :param get_x: Used to get the x angle, function that determines y direction
+            :param get_y: Used to get the y angle, function that determines the y value and direction
             :param get_z: Used to get the z angle, function that determines 
             rotation and direction of rotation. Z value must be given if it
             separate from the joystick. 
@@ -31,14 +31,15 @@ class MecanumDrive(Command):
         '''
             Called just before this Command runs the first time
         '''
-
+        pass
+    
     def execute(self):
         '''
             Called repeatedly when this Command is scheduled
             to run
         '''
         angle = self.gyro.getAngle() if self.gyro != None else 0
-        self.drive.robot_move(self.get_x, self.get_y, self.get_z, angle)
+        self.drive.robot_move(self.get_x(), self.get_y(), self.get_z(), angle)
 
     def isFinished(self):
         '''
