@@ -62,6 +62,17 @@ class GrabberLift(Subsystem):
         self.motor_slave.changeControlMode(GrabberLift.mFollower)
         #set slave to follow master commands
         self.motor_slave.set(self.motor_master.getDeviceID())
+        
+        #
+        # put PID data on dashboard, the robot should not update this again
+        #
+        
+        wpilib.SmartDashboard.putNumber('lift_p', self.p)
+        
+        wpilib.SmartDashboard.putNumber('lift_i', self.i)
+        
+        wpilib.SmartDashboard.putNumber('lift_d', self.d)
+        
     def clamp(self):
         '''
             Grabber arm clamps so it can hold totes/bins.
@@ -118,12 +129,6 @@ class GrabberLift(Subsystem):
                                         self.motor_master.getAnalogInPosition())
         
         wpilib.SmartDashboard.putBoolean('box_sensor', self.box_sensor.get())
-        
-        wpilib.SmartDashboard.putNumber('lift_p', self.p)
-        
-        wpilib.SmartDashboard.putNumber('lift_i', self.i)
-        
-        wpilib.SmartDashboard.putNumber('lift_d', self.d)
         
         wpilib.SmartDashboard.putNumber('lift_error', self.motor_master.getClosedLoopError() if self.mode == GrabberLift.mPostion  else 0)
         
