@@ -12,14 +12,16 @@ class MoveLift(Command):
     def __init__(self, grabber_lift, param):
         '''
             Raises lift using manual control
-            :param grabber_lift: subsystem of GrabberLift
-            :param value: value should be either a function that returns between -1 to 1 or a number between -1 to 1
+            :param grabber_lift : subsystem of GrabberLift
+            :param value : value should be either a function that returns between -1 to 1 or a number between -1 to 1
+            
+            
             
             Default command. We don't think we want it to be finished. EVER.
         '''
         super().__init__()
         self.grabber_lift = grabber_lift
-        self.requires(GrabberLift)
+        self.requires(grabber_lift)
         
         #
         # checks if the passed parameter (param) is callable (read is a function)

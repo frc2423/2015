@@ -11,18 +11,18 @@ class ArcadeDrive(Command):
         Used to move the robot
     '''
     def __init__(self, drive, get_x, get_y):
-        
-        
         '''
             initializes arcade drive movement
-            :param joystick : the primary controls for controlling the robot
+            :param drive : instance of the class Drive
+            :param get_x : can be a function or #
+            :param get_y : 
         '''
         super().__init__()
         
         self.drive = drive
         self.get_x = get_x
         self.get_y = get_y
-        self.requires(Drive)
+        self.requires(drive)
         
    
     def execute(self):

@@ -18,7 +18,7 @@ class ClawGrab(Command):
         super().__init__()
         self.setInterruptible(False)
         self.grabber_lift = grabber_lift
-        self.requires(GrabberLift)
+        self.requires(grabber_lift)
         self.setTimeout(1.5)
 
     def initialize(self):
