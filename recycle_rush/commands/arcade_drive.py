@@ -30,7 +30,9 @@ class ArcadeDrive(Command):
             Called repeatedly when this Command is scheduled
             to run
         '''
-        self.drive.robot_move(0, self.get_y, self.get_x, 0)
+        x = self.get_x() if callable(self.get_x) else self.get_x
+        y = self.get_y() if callable(self.get_y) else self.get_y
+        self.drive.robot_move(0, y, x, 0)
         
         
     def isFinished(self):
