@@ -23,23 +23,8 @@ class MoveLift(Command):
         self.grabber_lift = grabber_lift
         self.requires(grabber_lift)
         
-        #
-        # checks if the passed parameter (param) is callable (read is a function)
-        # part 1. Continued in execute
-        #        
-        if callable(param):
-            self.param_is_callable = True
-        
-        else:
-            self.param_is_callable = False
             
         self.param = param
-        
-    def initialize(self):
-        '''
-            Called just before this Command runs the first time
-        '''
-        pass
         
     def execute (self):
         '''
@@ -51,7 +36,7 @@ class MoveLift(Command):
         # so if the passed param is a value it gives move_lifter a value
         # otherwise it gives move_lifter the function. 
         #
-        if self.param_is_callable:
+        if callable(self.param):
             self.grabber_lift.move_lifter(self.param())
         else:
             self.grabber_lift.move_lifter(self.param)
@@ -61,9 +46,6 @@ class MoveLift(Command):
             Make this return true when this Command no longer needs to run execute()
         '''
         return False
-    
-    def end(self):
-        pass
     
     def interrupted(self):
         '''
