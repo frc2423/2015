@@ -41,7 +41,6 @@ class Drive(Subsystem):
         self.i = i
         self.d = d
         
-        print('entering PIDController init')
 #         self.gyro_pid = wpilib.PIDController(p, i, d, self.gyro, self.rb_motor)
 #         
 #         # we are using a continuous sensor here 
