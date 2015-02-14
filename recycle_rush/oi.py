@@ -63,10 +63,10 @@ class OI:
         self.r_trigger = JoystickButton(self.joy, lc.R_TRIGGER)
         
         # Attach commands to buttons
-        self.l_bumper.whenPressed(MoveLift(grabber_lift, .5))
-        self.l_trigger.whenPressed(MoveLift(grabber_lift, -.5))
-        self.r_bumper.whenPressed(ClawRelease(grabber_lift))
-        self.r_trigger.whenPressed(ClawGrab(grabber_lift))
+        self.l_bumper.whileActive(MoveLift(grabber_lift, .5))
+        self.l_trigger.whileActive(MoveLift(grabber_lift, -.5))
+        self.r_bumper.whileActive(ClawRelease(grabber_lift))
+        self.r_trigger.whileActive(ClawGrab(grabber_lift))
         
         # Default command
         self.drive.setDefaultCommand(MecanumDrive(self.drive, self._get_axis(self.joy, lc.L_AXIS_X),
