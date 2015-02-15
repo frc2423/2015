@@ -7,7 +7,8 @@ CAN_LIFT_TALON_BL     = 2
 CAN_LIFT_TALON_BR     = 3
 CAN_LIFT_TALON_FL     = 4
 CAN_LIFT_TALON_FR     = 5
-
+CAN_PCM               = 6
+CAN_PDP               = 7
 #
 # Digital IO
 #

@@ -36,7 +36,7 @@ class MyRobot(wpilib.IterativeRobot):
         #
         # all ports/channels related to solenoid ports
         #
-        self.grabber = wpilib.DoubleSolenoid(pv.SOLENOID_0, pv.SOLENOID_1)
+        self.grabber = wpilib.DoubleSolenoid(pv.CAN_PCM, pv.SOLENOID_0, pv.SOLENOID_1)
         
         #
         # built-in sensors

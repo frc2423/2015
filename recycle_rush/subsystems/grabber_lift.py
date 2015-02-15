@@ -75,7 +75,7 @@ class GrabberLift(Subsystem):
         
         #set slave to follow master commands(this sets the motor master id[which is 1]to the )
         self.motor_slave.set(self.motor_master.getDeviceID())
-        print ("device ID:",self.motor_master.getDeviceID())
+    
         
         
     def clamp(self):
@@ -83,23 +83,19 @@ class GrabberLift(Subsystem):
             Grabber arm clamps so it can hold totes/bins.
         '''
         self.grabber.set(GrabberLift.kForward)
-        print("Grabber:", self.grabber.get())
     
     def release (self):
         '''
             Grabber arm releases so it can let go of bins/totes.
         '''
         self.grabber.set(GrabberLift.kReverse)
-        print("Grabber:", self.grabber.get())
         
     def move_lifter(self, speed):
         '''
             Moves lifter based off direct input to motor
         '''
         self.set_mode(GrabberLift.mPercentVbus)
-        self.motor_master.set(speed)
-        print("arg speed:", speed)
-        print("actual speed:", self.motor_master.get())
+        self.motor_master.set(speed))
         
     def move_to_position(self, position):
         ''' 
