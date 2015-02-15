@@ -95,7 +95,7 @@ class GrabberLift(Subsystem):
             Moves lifter based off direct input to motor
         '''
         self.set_mode(GrabberLift.mPercentVbus)
-        self.motor_master.set(speed))
+        self.motor_master.set(speed)
         
     def move_to_position(self, position):
         ''' 
