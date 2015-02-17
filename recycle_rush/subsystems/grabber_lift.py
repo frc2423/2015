@@ -64,7 +64,10 @@ class GrabberLift(Subsystem):
         # set master PID settings
         self.motor_master.setFeedbackDevice(GrabberLift.kAnalogPot)
         self.motor_master.setPID(p, i, d)
-        
+        self.motor_master.setForwardSoftLimit(900)
+        self.motor_master.setReverseSoftLimit(100)
+        self.motor_master.setCloseLoopRampRate(.1)
+        self.goal_position = 500
         #set master control mode to default %vbus
         self.set_mode(GrabberLift.mPercentVbus)
         
@@ -97,13 +100,15 @@ class GrabberLift(Subsystem):
         self.set_mode(GrabberLift.mPercentVbus)
         self.motor_master.set(speed)
         
-    def move_to_position(self, position):
+    def prepare_to_move_to_position(self,position):    
+        self.goal_position = position
+        
+    def move_to_position(self):
         ''' 
             Moves lifter to a specified position
         '''
         self.set_mode(GrabberLift.mPostion)
-        self.motor_master.set(position)
-        self.goal_position = position
+        self.motor_master.set(self.goal_position)
         
     def is_at_position(self,position):
         '''
@@ -130,7 +135,7 @@ class GrabberLift(Subsystem):
         '''
             Updates the PID coefficients
         '''
-        
+        print('updateing PID')
         if p: 
             self.p = p
             self.motor_master.setP(p)
@@ -155,11 +160,11 @@ class GrabberLift(Subsystem):
         
         wpilib.SmartDashboard.putBoolean('box_sensor', self.box_sensor.get())
         
-        wpilib.SmartDashboard.putNumber('lift_error', self.motor_master.getClosedLoopError() if self.mode == GrabberLift.mPostion  else 0)
+        wpilib.SmartDashboard.putNumber('lift_error', self.motor_master.getClosedLoopError())
         
         wpilib.SmartDashboard.putNumber('lift_position', self.motor_master.getAnalogInRaw())
         
         wpilib.SmartDashboard.putString('lift_mode', GrabberLift.control_mode_map[self.mode])
     
-            
+        wpilib.SmartDashboard.putNumber('actual_goal_pos', self.goal_position)
     

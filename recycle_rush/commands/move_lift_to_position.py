@@ -35,7 +35,8 @@ class MoveLiftToPosition(Command):
             pass
         
         else:
-            self.grabber_lift.move_to_position(self.position)
+            self.grabber_lift.prepare_to_move_to_position(self.position)
+            self.grabber_lift.move_to_position()
             
     def execute(self):
         '''
@@ -43,7 +44,8 @@ class MoveLiftToPosition(Command):
             Moves lifter when param passed is a function
         '''
         if self.param_is_callable:
-            self.grabber_lift.move_to_position(self.position())
+            self.grabber_lift.prepare_to_move_to_position(self.position())
+            self.grabber_lift.move_to_position()
         else:
             pass
     
