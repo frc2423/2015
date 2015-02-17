@@ -4,7 +4,7 @@ Created on Jan 19, 2015
 '''
 import wpilib
 from wpilib.command import Subsystem
-
+from common import height_levels as hl
 class GrabberLift(Subsystem):
     '''
         Used to mobilize grabby thing and lift up the item
@@ -102,8 +102,9 @@ class GrabberLift(Subsystem):
             Moves lifter to a specified position
         '''
         self.set_mode(GrabberLift.mPostion)
-        self.motor_master.set(position)
-        self.goal_position = position
+        position_in_bits = hl.inches_to_bits(position)
+        self.motor_master.set(position_in_bits)
+        self.goal_position = position_in_bits
         
     def is_at_position(self,position):
         '''
