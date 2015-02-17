@@ -3,7 +3,10 @@ from wpilib.command.commandgroup import CommandGroup
 from common import robot_speed as rs
 from commands.turn_to_specified_angle import TurnToSpecifiedAngle
 from commands.mecanum_drive import MecanumDrive 
-from common.robot.speed import time_to_move
+from commands.claw_grab import ClawGrab
+from commands.move_lift_to_position import MoveLiftToPosition
+from commands.claw_release import ClawRelease
+from common.robot_speed import time_to_move
 
 class Auto_One_Object (CommandGroup):
     
