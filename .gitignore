@@ -3,3 +3,5 @@ __pycache__/
 *.py[cod]
 
 /recycle_rush/.pydevproject
+
+/recycle_rush/.deploy_cfg
