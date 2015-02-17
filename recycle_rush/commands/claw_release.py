@@ -22,13 +22,14 @@ class ClawRelease(Command):
         '''
             Called just before this Command runs the first time
         '''
-        self.grabber_lift.release()
+        #self.grabber_lift.release() was moved
         
     def execute(self):
         '''
             Called repeatedly when this Command is scheduled to run
         '''
-        pass
+        self.grabber_lift.release()
+        
     
     def isFinished(self):
         '''

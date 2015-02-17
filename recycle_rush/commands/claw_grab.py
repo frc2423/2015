@@ -23,12 +23,12 @@ class ClawGrab(Command):
 
     def initialize(self):
         """Called just before this Command runs the first time"""
-        self.grabber_lift.clamp()
+        #self.grabber_lift.clamp()
         
 
     def execute(self):
         """Called repeatedly when this Command is scheduled to run"""
-        pass
+        self.grabber_lift.clamp()
 
     def isFinished(self):
         """This should return true when this command no longer

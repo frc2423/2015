@@ -7,7 +7,7 @@ from wpilib.command import Command
 
 class MoveLiftToPosition(Command):
     
-    def __init__ (self, grabber_lift, param):
+    def __init__ (self, grabber_lift, position):
         '''
             Raises lift to a specified position.
             These will need to be based off the number of stacked totes and where the stack is.
@@ -18,22 +18,15 @@ class MoveLiftToPosition(Command):
         self.grabber_lift = grabber_lift
         self.requires(grabber_lift)
         
-        if callable(param):
-            self.param_is_callable = True
-        
-        else:
-            self.param_is_callable = False
-        
-        self.param = param
+        self.position = position
         
     def initialize(self):
         '''
             Called just before this Command runs the first time
             Moves lifter is param passed is a position (number as opposed to a function)
         '''
-        if self.param_is_callable:
-            pass
-        
+        if callable(self.position):
+            self.grabber_lift.move_to_position(self.position())
         else:
             self.grabber_lift.move_to_position(self.position)
             
