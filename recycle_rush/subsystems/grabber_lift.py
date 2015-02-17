@@ -99,6 +99,7 @@ class GrabberLift(Subsystem):
         '''
         self.set_mode(GrabberLift.mPercentVbus)
         self.motor_master.set(speed)
+        self.change_break_mode(False)
         
     def prepare_to_move_to_position(self,position):
         '''
@@ -113,6 +114,9 @@ class GrabberLift(Subsystem):
         '''
         self.set_mode(GrabberLift.mPostion)
         self.motor_master.set(self.goal_position)
+        
+        self.set_mode(GrabberLift.mPercentVbus)
+        self.change_break_mode(True)
         
     def is_at_position(self,position):
         '''
@@ -139,7 +143,7 @@ class GrabberLift(Subsystem):
         '''
             Updates the PID coefficients
         '''
-        print('updateing PID')
+        print('updating PID')
         if p: 
             self.p = p
             self.motor_master.setP(p)
@@ -152,7 +156,12 @@ class GrabberLift(Subsystem):
             self.d = d
             self.motor_master.setD(d)
         
-        
+    def change_break_mode(self, yes_or_no_break):
+        '''
+        Enable's break mode. Yes_or_no_break is a boolean
+        Unsure why this is necessary.
+        '''
+        self.motor_master.enableBrakeMode(yes_or_no_break)
         
         
     def log(self):
