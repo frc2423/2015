@@ -22,6 +22,7 @@ class SmartDashboardUpdateTrigger(Trigger):
         self.sd = NetworkTable.getTable('SmartDashboard')
         self.auto_update_value = self.sd.getAutoUpdateValue(table_key, default_value)
         self.last_value = self.auto_update_value.get()
+    
 
     def get(self):
         updated = self.auto_update_value.get() != self.last_value

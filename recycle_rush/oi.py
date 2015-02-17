@@ -13,6 +13,7 @@ from commands.mecanum_drive import MecanumDrive
 from commands.command_call import CommandCall
 from subsystems.grabber_lift import GrabberLift
 from common.smartdashboard_update_trigger import SmartDashboardUpdateTrigger
+from common import height_levels as hl
 
 class OI:
     
@@ -62,8 +63,12 @@ class OI:
         lift_pos_trigger.whenActive(
               CommandCall(lambda : grabber_lift.prepare_to_move_to_position(lift_pos_trigger.get_key_value())))
         
+        lift_position = SmartDashboardUpdateTrigger('lift_position',0)
+        lift_position.whenActive(
+              MoveLiftToPosition(grabber_lift, hl.inches_to_bits(lift_position.get_key_value() + 
+              wpilib.SmartDashboard.getNumber('lift_offset'))))
         
-
+        
     def _get_axis(self, joystick, axis):
         return lambda : joystick.getAxis(axis)
 
