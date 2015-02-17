@@ -3,6 +3,8 @@ Created on Feb 6, 2015
 
 @author: Taylor
 '''
+
+import wpilib
 from wpilib.joystick import Joystick
 from common import logitec_controller as lc
 from wpilib.buttons.joystickbutton import JoystickButton
@@ -11,6 +13,7 @@ from commands.claw_release import ClawRelease
 from commands.claw_grab import ClawGrab
 from commands.mecanum_drive import MecanumDrive
 from commands.command_call import CommandCall
+from commands.move_lift_to_position import MoveLiftToPosition
 from subsystems.grabber_lift import GrabberLift
 from common.smartdashboard_update_trigger import SmartDashboardUpdateTrigger
 from common import height_levels as hl
@@ -66,7 +69,7 @@ class OI:
         lift_position = SmartDashboardUpdateTrigger('lift_position',0)
         lift_position.whenActive(
               MoveLiftToPosition(grabber_lift, hl.inches_to_bits(lift_position.get_key_value() + 
-              wpilib.SmartDashboard.getNumber('lift_offset'))))
+              wpilib.SmartDashboard.getNumber('lift_offset', 0))))
         
         
     def _get_axis(self, joystick, axis):
