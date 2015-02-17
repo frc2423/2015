@@ -34,13 +34,8 @@ class MoveLiftToPosition(Command):
     def execute(self):
         '''
             Called repeatedly when this Command is scheduled to run
-            Moves lifter when param passed is a function
         '''
-        if self.param_is_callable:
-            self.grabber_lift.prepare_to_move_to_position(self.position())
-            self.grabber_lift.move_to_position()
-        else:
-            pass
+        pass
     
     def isFinished(self):
         '''
