@@ -4,7 +4,7 @@ Created on Jan 19, 2015
 '''
 import wpilib
 from wpilib.command import Subsystem
-
+from common import height_levels as hl
 class GrabberLift(Subsystem):
     '''
         Used to mobilize grabby thing and lift up the item
@@ -100,12 +100,16 @@ class GrabberLift(Subsystem):
         self.set_mode(GrabberLift.mPercentVbus)
         self.motor_master.set(speed)
         
-    def prepare_to_move_to_position(self,position):    
+    def prepare_to_move_to_position(self,position):
+        '''
+           set our position we shall go to when we change to position control mode
+           :param position: position we should go to ranging from 0 to 1024  
+        '''    
         self.goal_position = position
         
     def move_to_position(self):
         ''' 
-            Moves lifter to a specified position
+            Moves lifter to a specified position 
         '''
         self.set_mode(GrabberLift.mPostion)
         self.motor_master.set(self.goal_position)
@@ -166,5 +170,6 @@ class GrabberLift(Subsystem):
         
         wpilib.SmartDashboard.putString('lift_mode', GrabberLift.control_mode_map[self.mode])
     
+
         wpilib.SmartDashboard.putNumber('actual_goal_pos', self.goal_position)
     

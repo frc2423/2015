@@ -20,7 +20,7 @@ DIO_BOX_SENSOR = 0
 AI_GIRO = 0
 
 #
-# Solenoid 
+# Solenoid
 #
 SOLENOID_0 = 0
 SOLENOID_1 = 1
