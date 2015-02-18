@@ -1,7 +1,3 @@
-'''
-Created on Jan 19, 2015
-@author: Taylor
-'''
 import wpilib
 from wpilib.command import Subsystem
 from common import height_levels as hl
@@ -163,6 +159,9 @@ class GrabberLift(Subsystem):
         '''
         self.motor_master.enableBrakeMode(yes_or_no_break)
         
+    def pot_reading(self):
+        
+        self.motor_master.getAnalogInRaw()
         
     def log(self):
         '''
