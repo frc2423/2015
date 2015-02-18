@@ -161,7 +161,7 @@ class GrabberLift(Subsystem):
         
     def pot_reading(self):
         
-        self.motor_master.getAnalogInRaw()
+        return self.motor_master.getAnalogInRaw()
         
     def log(self):
         '''
