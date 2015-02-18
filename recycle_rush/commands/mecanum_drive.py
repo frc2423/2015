@@ -1,8 +1,3 @@
-'''
-    Created on Jan 31, 2015
-    @author: Taylor
-'''
-
 from wpilib.command import Command
 
 class MecanumDrive(Command):

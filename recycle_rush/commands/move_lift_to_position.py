@@ -1,8 +1,3 @@
-'''
-Created on Feb 7, 2015
-
-@author: Ghi
-'''
 from wpilib.command import Command
 
 class MoveLiftToPosition(Command):

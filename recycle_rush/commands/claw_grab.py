@@ -1,7 +1,3 @@
-'''
-    Created on Jan 29, 2015
-    @author: Ghi
-'''
 from wpilib.command import Command
 from subsystems.grabber_lift import GrabberLift
 

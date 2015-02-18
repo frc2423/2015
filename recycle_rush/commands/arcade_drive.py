@@ -1,7 +1,3 @@
-'''
-    Created on Feb 5, 2015
-    @author: Taylor
-'''
 import wpilib
 from wpilib.command import Command
 from subsystems.drive import Drive
