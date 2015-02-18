@@ -3,8 +3,8 @@
 '''
 
 #axis
-L_AXIS_X = 1
-L_AXIS_Y = 2
+L_AXIS_X = 0
+L_AXIS_Y = 1
 R_AXIS_X = 3
 R_AXIS_Y = 4
 D_PAD_AXIS_X = 5
