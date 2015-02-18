@@ -1,9 +1,3 @@
-'''
-Created on Feb 6, 2015
-
-@author: Taylor
-'''
-
 import wpilib
 from wpilib.joystick import Joystick
 from common import logitec_controller as lc
@@ -71,6 +65,13 @@ class OI:
               MoveLiftToPosition(grabber_lift, hl.inches_to_bits(lift_position.get_key_value() + 
               wpilib.SmartDashboard.getNumber('lift_offset', 0))))
         
+        out_of_range = OutOfRangeTrigger(hl.TOO_HIGH, hl.TOO_LOW, grabber_lift.pot_reading)
+        out_of_range.whenActive(
+              CommandCall(grabber_lift.change_break_mode(True)))
+        
+        in_range = OutOfRangeTrigger(hl.TOO_HIGH, hl.TOO_LOW, grabber_lift.pot_reading)
+        in_range.whenInactive(
+              CommandCall(grabber_lift.change_break_mode(False)))
         
     def _get_axis(self, joystick, axis):
         return lambda : joystick.getAxis(axis)
