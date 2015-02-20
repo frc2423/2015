@@ -30,7 +30,8 @@ class Drive(Subsystem):
         '''
         super().__init__()
         self.robot_drive = wpilib.RobotDrive(lf_motor, lb_motor, rf_motor, rb_motor)
-        
+        self.robot_drive.setInvertedMotor(1, True)
+        self.robot_drive.setInvertedMotor(3, True)
         self.lf_motor = lf_motor
         self.lb_motor = lb_motor
         self.rf_motor = rf_motor

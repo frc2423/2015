@@ -10,6 +10,7 @@ from commands.command_call import CommandCall
 from commands.move_lift_to_position import MoveLiftToPosition
 from subsystems.grabber_lift import GrabberLift
 from common.smartdashboard_update_trigger import SmartDashboardUpdateTrigger
+from common.out_of_range_trigger import OutOfRangeTrigger
 from common import height_levels as hl
 
 class OI:
@@ -36,9 +37,9 @@ class OI:
 
         
         # Default command
-        self.drive.setDefaultCommand(MecanumDrive(self.drive, self._get_axis(self.joy, lc.L_AXIS_X),
-                                                  self._get_axis(self.joy, lc.L_AXIS_Y),
-                                                  self._get_axis(self.joy, lc.R_AXIS_X)))
+        self.drive.setDefaultCommand(MecanumDrive(self.drive, self._get_axis(self.joy, lc.R_AXIS_X),
+                                                  self._get_axis(self.joy, lc.R_AXIS_Y),
+                                                  self._get_axis(self.joy, lc.L_AXIS_X)))
         
         
         
