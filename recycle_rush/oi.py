@@ -12,6 +12,8 @@ from subsystems.grabber_lift import GrabberLift
 from common.smartdashboard_update_trigger import SmartDashboardUpdateTrigger
 from common.out_of_range_trigger import OutOfRangeTrigger
 from common import height_levels as hl
+from wpilib.sendablechooser import SendableChooser
+from wpilib.smartdashboard import SmartDashboard
 
 class OI:
     
@@ -74,7 +76,10 @@ class OI:
         in_range.whenInactive(
               CommandCall(grabber_lift.change_break_mode(False)))
         
+        auto_chooser = SendableChooser()
+        auto_chooser.addObject('Auto Move Forward', AutoMoveForward(drive, gyro))
+        SmartDashboard.putData('Autonomous Modes', auto_chooser)
+        
     def _get_axis(self, joystick, axis):
         return lambda : joystick.getAxis(axis)
 
-        
