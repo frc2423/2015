@@ -67,7 +67,7 @@ class MyRobot(wpilib.IterativeRobot):
         #
         # create OI
         #
-        self.oi = OI(self.grabber_lift, self.robot_drive)
+        self.oi = OI(self.grabber_lift, self.robot_drive, self.gyro)
         
         #
         # timer 

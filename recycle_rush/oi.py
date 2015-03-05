@@ -8,6 +8,8 @@ from commands.claw_grab import ClawGrab
 from commands.mecanum_drive import MecanumDrive
 from commands.command_call import CommandCall
 from commands.move_lift_to_position import MoveLiftToPosition
+from commands.auto_move_forward import AutoMoveForward
+from commands.auto_one_object import Auto_One_Object
 from subsystems.grabber_lift import GrabberLift
 from common.smartdashboard_update_trigger import SmartDashboardUpdateTrigger
 from common.out_of_range_trigger import OutOfRangeTrigger
@@ -17,7 +19,7 @@ from wpilib.smartdashboard import SmartDashboard
 
 class OI:
     
-    def __init__ (self, grabber_lift, drive):
+    def __init__ (self, grabber_lift, drive, gyro):
         self.joy = Joystick(0)
         self.drive = drive
         
@@ -78,6 +80,7 @@ class OI:
         
         auto_chooser = SendableChooser()
         auto_chooser.addObject('Auto Move Forward', AutoMoveForward(drive, gyro))
+        auto_chooser.addObject('Auto One Object', Auto_One_Object(drive, grabber_lift, 0, gyro))
         SmartDashboard.putData('Autonomous Modes', auto_chooser)
         
     def _get_axis(self, joystick, axis):
