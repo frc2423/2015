@@ -87,6 +87,7 @@ class MyRobot(wpilib.IterativeRobot):
             function initializes our autonomous modes, we may
             have more than one
         '''
+        self.oi.auto_choose.getSelected().start()
         self.timer.start()
     
     def autonomousPeriodic(self):
@@ -135,7 +136,3 @@ class MyRobot(wpilib.IterativeRobot):
 
 if __name__ == '__main__':
     wpilib.run(MyRobot)
-        
-    
-    
-        

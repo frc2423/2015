@@ -44,7 +44,13 @@ class OI:
         self.drive.setDefaultCommand(MecanumDrive(self.drive, self._get_axis(self.joy, lc.R_AXIS_X),
                                                   self._get_axis(self.joy, lc.R_AXIS_Y),
                                                   self._get_axis(self.joy, lc.L_AXIS_X)))
-        
+        self.grabber_lift.setDefaultCommand(GrabberLift(motor_master, 
+                                                        motor_slave, 
+                                                        grabber, 
+                                                        box_sensor, 
+                                                        p = kP_default, 
+                                                        i = kI_default, 
+                                                        d = kD_default))
         
         
         #create pid update triggers
@@ -67,8 +73,9 @@ class OI:
         
         lift_position = SmartDashboardUpdateTrigger('lift_position',0)
         lift_position.whenActive(
-              MoveLiftToPosition(grabber_lift, hl.inches_to_bits(lift_position.get_key_value() + 
-              wpilib.SmartDashboard.getNumber('lift_offset', 0))))
+              MoveLiftToPosition(grabber_lift, 
+                                 lambda : hl.inches_to_bits(self.height_level.getSelected() +
+                                                            self.offset.getSelected())))
         
         out_of_range = OutOfRangeTrigger(hl.TOO_HIGH, hl.TOO_LOW, grabber_lift.pot_reading)
         out_of_range.whenActive(
@@ -78,11 +85,23 @@ class OI:
         in_range.whenInactive(
               CommandCall(grabber_lift.change_break_mode(False)))
         
-        auto_chooser = SendableChooser()
-        auto_chooser.addObject('Auto Move Forward', AutoMoveForward(drive, gyro))
-        auto_chooser.addObject('Auto One Object', Auto_One_Object(drive, grabber_lift, 0, gyro))
-        SmartDashboard.putData('Autonomous Modes', auto_chooser)
+        self.auto_choose = SendableChooser()
+        self.auto_choose.addObject('Auto Move Forward', AutoMoveForward(drive, gyro))
+        self.auto_choose.addObject('Auto One Object', Auto_One_Object(drive, grabber_lift, 0, gyro))
+        SmartDashboard.putData('Autonomous Mode', self.auto_choose)
+        
+        
+        self.height_level = SendableChooser()
+        self.height_level.addObject('Level 1', hl.START_LEVEL)
+        self.height_level.addObject('Level 2',  hl.START_LEVEL + hl.TOTE_HEIGHT)
+        
+        SmartDashboard.putData('Height Level', self.height_level)
+        
+        self.offset = SendableChooser()
+        self.offset.addObject ('Step 1', hl.START_LEVEL + hl.STEP_HEIGHT)
+        self.offset.addObject ('Step 2', hl.START_LEVEL + hl.STEP_HEIGHT + hl.TOTE_HEIGHT)
+
+        SmartDashboard.putData ('Offset Height', self.height_level)
         
     def _get_axis(self, joystick, axis):
         return lambda : joystick.getAxis(axis)
-

@@ -1,6 +1,7 @@
 import wpilib
 from wpilib.command import Subsystem
 from common import height_levels as hl
+from builtins import None
 class GrabberLift(Subsystem):
     '''
         Used to mobilize grabby thing and lift up the item
@@ -127,7 +128,7 @@ class GrabberLift(Subsystem):
         '''
         self.motor_master.changeControlMode(mode)
         self.mode = mode
-        
+    
     def get_mode (self):
         '''
             Gets the mode the lift motor is in
