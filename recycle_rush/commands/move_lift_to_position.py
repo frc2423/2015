@@ -18,19 +18,19 @@ class MoveLiftToPosition(Command):
     def initialize(self):
         '''
             Called just before this Command runs the first time
-            Moves lifter is param passed is a position (number as opposed to a function)
+        '''
+        pass
+    
+    def execute(self):
+        '''
+            Called repeatedly when this Command is scheduled to run.
+            The grabber_lift is called repeatedly to set the setpoint
         '''
         if callable(self.position):
             self.grabber_lift.move_to_position(self.position())
         else:
             self.grabber_lift.prepare_to_move_to_position(self.position)
             self.grabber_lift.move_to_position()
-            
-    def execute(self):
-        '''
-            Called repeatedly when this Command is scheduled to run
-        '''
-        pass
     
     def isFinished(self):
         '''
