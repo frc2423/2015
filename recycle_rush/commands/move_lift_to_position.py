@@ -15,16 +15,15 @@ class MoveLiftToPosition(Command):
         
         self.position = position
         
+        # When the lifter is in position, give the PID Controller a bit of time
+        # to adjust
+        self.pid_timer_started = False
+        self.time_to_adjust = .2
+        
     def initialize(self):
         '''
-            Called just before this Command runs the first time
-        '''
-        pass
-    
-    def execute(self):
-        '''
-            Called repeatedly when this Command is scheduled to run.
-            The grabber_lift is called repeatedly to set the setpoint
+            Moves the lifter to a particular position. The PIDController
+            takes over so it is only called once.
         '''
         if callable(self.position):
             self.grabber_lift.move_to_position(self.position())
@@ -32,13 +31,23 @@ class MoveLiftToPosition(Command):
             self.grabber_lift.prepare_to_move_to_position(self.position)
             self.grabber_lift.move_to_position()
     
+    
     def isFinished(self):
         '''
             Make this return true when this Command no longer needs to run execute()
         '''
-        pass
-    # Not sure what we do here because we use the PID stuff to know when it is finished
-    # And any other command can take over any point
+        
+        if self.pid_timer_started is False:
+            
+            if self.grabber_lift.is_at_position():
+                self.pid_timer_started = True
+                self.setTimeout(self.time_to_adjust)
+                
+            return False
+        
+        else:
+                     
+            return self.isTimedOut()
     
     def end(self):
         '''

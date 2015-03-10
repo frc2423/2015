@@ -1,7 +1,7 @@
 import wpilib
 from wpilib.command import Subsystem
 from common import height_levels as hl
-from builtins import None
+
 class GrabberLift(Subsystem):
     '''
         Used to mobilize grabby thing and lift up the item
@@ -65,6 +65,7 @@ class GrabberLift(Subsystem):
         self.motor_master.setReverseSoftLimit(100)
         self.motor_master.setCloseLoopRampRate(.1)
         self.goal_position = 500
+        self.tolerance = 50
         #set master control mode to default %vbus
         self.set_mode(GrabberLift.mPercentVbus)
         
@@ -115,12 +116,13 @@ class GrabberLift(Subsystem):
         self.set_mode(GrabberLift.mPercentVbus)
         self.change_break_mode(True)
         
-    def is_at_position(self,position):
+    def is_at_position(self):
         '''
             compares the actual position of robot to current
             position of the robot
         '''
-        pass
+        self.motor_master.getClosedLoopError() < self.tolerance
+        return False
     
     def set_mode (self, mode):
         '''
