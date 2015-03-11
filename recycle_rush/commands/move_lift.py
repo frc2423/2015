@@ -21,6 +21,12 @@ class MoveLift(Command):
             
         self.param = param
         
+    def initialize(self):
+        '''
+        '''
+        
+        self.grabber_lift.change_break_mode(True)
+        
     def execute (self):
         '''
             Called repeatedly when this Command is scheduled to run

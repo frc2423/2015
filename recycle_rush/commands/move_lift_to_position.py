@@ -30,6 +30,9 @@ class MoveLiftToPosition(Command):
         else:
             self.grabber_lift.prepare_to_move_to_position(self.position)
             self.grabber_lift.move_to_position()
+            
+            
+        self.grabber_lift.change_break_mode(False)
     
     
     def isFinished(self):
@@ -42,6 +45,7 @@ class MoveLiftToPosition(Command):
             if self.grabber_lift.is_at_position():
                 self.pid_timer_started = True
                 self.setTimeout(self.time_to_adjust)
+                self.grabber_lift.change_break_mode(True)
                 
             return False
         

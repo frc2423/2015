@@ -68,9 +68,9 @@ class OI:
                                                             self.offset.getSelected())))
         
         # Default command
-        self.drive.setDefaultCommand(MecanumDrive(self.drive, self._get_axis(self.joy, lc.R_AXIS_X),
-                                                  self._get_axis(self.joy, lc.R_AXIS_Y),
-                                                  self._get_axis(self.joy, lc.L_AXIS_X)))
+        self.drive.setDefaultCommand(MecanumDrive(self.drive, self._get_axis(self.joy, lc.L_AXIS_X),
+                                                  self._get_axis(self.joy, lc.L_AXIS_Y),
+                                                  self._get_axis(self.joy, lc.R_AXIS_X)))
         self.grabber_lift.setDefaultCommand(MoveLift(grabber_lift, 0))
         
         
