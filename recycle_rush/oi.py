@@ -56,8 +56,8 @@ class OI:
         self.height_level_trigger = ValueUpdatedTrigger(self.height_level.getSelected)
         
         # Attach commands to buttons
-        self.l_bumper.whileActive(MoveLift(grabber_lift, .5))
-        self.l_trigger.whileActive(MoveLift(grabber_lift, -.5))
+        self.l_bumper.whileActive(MoveLift(grabber_lift, -.5))
+        self.l_trigger.whileActive(MoveLift(grabber_lift, .5))
         self.r_bumper.whenPressed(ClawRelease(grabber_lift))
         self.r_trigger.whenPressed(ClawGrab(grabber_lift))
         self.btn_two.whenPressed(CommandCall(lambda : grabber_lift.move_to_position()))

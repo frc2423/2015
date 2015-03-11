@@ -161,6 +161,7 @@ class GrabberLift(Subsystem):
         Unsure why this is necessary.
         '''
         self.motor_master.enableBrakeMode(yes_or_no_break)
+        self.motor_slave.enableBrakeMode(yes_or_no_break)
         
     def pot_reading(self):
         
