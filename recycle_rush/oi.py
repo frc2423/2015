@@ -8,6 +8,7 @@ from commands.claw_grab import ClawGrab
 from commands.mecanum_drive import MecanumDrive
 from commands.command_call import CommandCall
 from commands.move_lift_to_position import MoveLiftToPosition
+from commands.auto_do_nothing import AutoDoNothing
 from commands.auto_move_forward import AutoMoveForward
 from commands.auto_one_object import Auto_One_Object
 from subsystems.grabber_lift import GrabberLift
@@ -27,8 +28,9 @@ class OI:
         
         #Sendable Choosers used to create radio button groups on SmartDashboard
         self.auto_choose = SendableChooser()
+        self.auto_choose.addObject('Auto Do Nothing', AutoDoNothing(drive))
         self.auto_choose.addObject('Auto Move Forward', AutoMoveForward(drive, gyro))
-        self.auto_choose.addObject('Auto One Object', Auto_One_Object(drive, grabber_lift, 0, gyro))
+        self.auto_choose.addObject('Auto One Object', Auto_One_Object(drive, grabber_lift, gyro))
         SmartDashboard.putData('Autonomous Mode', self.auto_choose)
            
         self.height_level = SendableChooser()

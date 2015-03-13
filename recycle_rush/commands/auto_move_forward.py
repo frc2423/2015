@@ -1,6 +1,7 @@
 import wpilib
 from wpilib.command.commandgroup import CommandGroup
 from commands.mecanum_drive import MecanumDrive
+from commands.dont_move import DontMove
 from common import robot_speed as rs
 
 class AutoMoveForward(CommandGroup):
@@ -12,6 +13,8 @@ class AutoMoveForward(CommandGroup):
         time = rs.time_to_move(.5, 10)
         
         self.addSequential(MecanumDrive(drive, 0, rs.VOLTAGE_50, 0, self.gyro), time)
+        self.addSequential(DontMove(drive))
+        
         # The above one is 1 second.
         
         

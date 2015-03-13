@@ -51,11 +51,12 @@ class MecanumDrive(Command):
         '''
             Called once after isFinished returns true
         '''
-        pass
+        self.drive.robot_move (0,0,0,0)
+        
     def interrupted(self):
         '''
             Called when another command which requires one or
             more of the same subsystems is scheduled to run
         '''
-        self.drive.robot_move (0,0,0,0)
+        self.end()
         
