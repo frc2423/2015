@@ -59,7 +59,7 @@ class GrabberLift(Subsystem):
         self.goal_position = 0
         self.mode = None
         # set master PID settings
-        self.motor_master.setFeedbackDevice(GrabberLift.kAnalogPot)
+        #self.motor_master.setFeedbackDevice(GrabberLift.kAnalogPot)
         self.motor_master.setPID(p, i, d)
    #     self.motor_master.setForwardSoftLimit(900)
   #      self.motor_master.setReverseSoftLimit(100)
@@ -110,16 +110,16 @@ class GrabberLift(Subsystem):
         ''' 
             Moves lifter to a specified position 
         '''
-        self.set_mode(GrabberLift.mPostion)
-        self.motor_master.set(self.goal_position)
-        self.change_break_mode(False)
+        #self.set_mode(GrabberLift.mPostion)
+        #self.motor_master.set(self.goal_position)
+        #self.change_break_mode(False)
         
     def is_at_position(self):
         '''
             compares the actual position of robot to current
             position of the robot
         '''
-        self.motor_master.getClosedLoopError() < self.tolerance
+        #self.motor_master.getClosedLoopError() < self.tolerance
         return False
     
     def set_mode (self, mode):
@@ -162,8 +162,9 @@ class GrabberLift(Subsystem):
         self.motor_slave.enableBrakeMode(yes_or_no_break)
         
     def pot_reading(self):
-        
-        return self.motor_master.getAnalogInRaw()
+
+        return 0
+        #return self.motor_master.getAnalogInRaw()
         
     def log(self):
         '''
@@ -172,11 +173,11 @@ class GrabberLift(Subsystem):
         
         wpilib.SmartDashboard.putBoolean('box_sensor', self.box_sensor.get())
         
-        wpilib.SmartDashboard.putNumber('lift_error', self.motor_master.getClosedLoopError())
+        #wpilib.SmartDashboard.putNumber('lift_error', self.motor_master.getClosedLoopError())
         
-        wpilib.SmartDashboard.putNumber('lift_position', self.motor_master.getAnalogInPosition())
+        #wpilib.SmartDashboard.putNumber('lift_position', self.motor_master.getAnalogInPosition())
         
-        wpilib.SmartDashboard.putString('lift_mode', GrabberLift.control_mode_map[self.mode])
+        #wpilib.SmartDashboard.putString('lift_mode', GrabberLift.control_mode_map[self.mode])
     
 
         wpilib.SmartDashboard.putNumber('actual_goal_pos', self.goal_position)
