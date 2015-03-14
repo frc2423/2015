@@ -4,7 +4,7 @@ class MecanumDrive(Command):
     '''
         Used to move the robot
     '''
-    def __init__(self, drive, get_x, get_y, get_z, gyro = None):
+    def __init__(self, drive, get_x, get_y, get_z, gyro = None, weight_modifier = None):
         '''
             initializes mecanum drive movement.
             :param drive : the drive subsystem
@@ -19,6 +19,7 @@ class MecanumDrive(Command):
         self.get_x = get_x
         self.get_y = get_y
         self.get_z = get_z
+        self.get_multi = weight_modifier
         self.gyro = gyro
         self.requires(drive)
 
@@ -37,10 +38,9 @@ class MecanumDrive(Command):
         x = self.get_x() if callable(self.get_x) else self.get_x
         y = self.get_y() if callable(self.get_y) else self.get_y
         z = self.get_z() if callable(self.get_z) else self.get_z
+        mutli = self.get_multi() if callable(self.get_multi) else self.get_multi
         
-        x = x * .7
-        
-        self.drive.robot_move(x, y, z, angle)
+        self.drive.robot_move(x, y, z, angle, mutli)
         
 
     def isFinished(self):

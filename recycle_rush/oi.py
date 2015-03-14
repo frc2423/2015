@@ -70,14 +70,16 @@ class OI:
 #                                 hl.inches_to_bits(self.height_level.getSelected() +
 #                                                             self.offset.getSelected())))
 #         
-        # Default command
-        #self.drive.setDefaultCommand(MecanumDrive(self.drive, self._get_axis(self.joy, lc.L_AXIS_X),
-        #                                          self._get_axis(self.joy, lc.L_AXIS_Y),
-        #                                          self._get_axis(self.joy, lc.R_AXIS_X)))
+        #Default command
+        self.drive.setDefaultCommand(MecanumDrive(self.drive, self._get_axis(self.joy, lc.L_AXIS_X),
+                                                  self._get_axis(self.joy, lc.L_AXIS_Y),
+                                                  self._get_axis(self.joy, lc.R_AXIS_X), 
+                                                  None,
+                                                  .7))
         
         
-        self.drive.setDefaultCommand(ArcadeDrive(self.drive, self._get_axis(self.joy, lc.L_AXIS_X),
-                                                  self._get_axis(self.joy, lc.L_AXIS_Y)))
+#         self.drive.setDefaultCommand(ArcadeDrive(self.drive, self._get_axis(self.joy, lc.L_AXIS_X),
+#                                                   self._get_axis(self.joy, lc.L_AXIS_Y)))
         self.grabber_lift.setDefaultCommand(MoveLift(grabber_lift, 0))
         
         
