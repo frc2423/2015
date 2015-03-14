@@ -11,6 +11,7 @@ from commands.move_lift_to_position import MoveLiftToPosition
 from commands.auto_do_nothing import AutoDoNothing
 from commands.auto_move_forward import AutoMoveForward
 from commands.auto_one_object import Auto_One_Object
+from commands.arcade_drive import ArcadeDrive
 from subsystems.grabber_lift import GrabberLift
 from common.smartdashboard_update_trigger import SmartDashboardUpdateTrigger
 from common.out_of_range_trigger import OutOfRangeTrigger
@@ -64,15 +65,19 @@ class OI:
         self.r_trigger.whenPressed(ClawGrab(grabber_lift))
         self.btn_two.whenPressed(CommandCall(lambda : grabber_lift.move_to_position()))
         self.btn_one.whenPressed(CommandCall(lambda : grabber_lift.set_mode(GrabberLift.mPercentVbus)))
-        self.height_level_trigger.whenActive(
-             MoveLiftToPosition(grabber_lift, 
-                                hl.inches_to_bits(self.height_level.getSelected() +
-                                                            self.offset.getSelected())))
-        
+#         self.height_level_trigger.whenActive(
+#              MoveLiftToPosition(grabber_lift, 
+#                                 hl.inches_to_bits(self.height_level.getSelected() +
+#                                                             self.offset.getSelected())))
+#         
         # Default command
-        self.drive.setDefaultCommand(MecanumDrive(self.drive, self._get_axis(self.joy, lc.L_AXIS_X),
-                                                  self._get_axis(self.joy, lc.L_AXIS_Y),
-                                                  self._get_axis(self.joy, lc.R_AXIS_X)))
+        #self.drive.setDefaultCommand(MecanumDrive(self.drive, self._get_axis(self.joy, lc.L_AXIS_X),
+        #                                          self._get_axis(self.joy, lc.L_AXIS_Y),
+        #                                          self._get_axis(self.joy, lc.R_AXIS_X)))
+        
+        
+        self.drive.setDefaultCommand(ArcadeDrive(self.drive, self._get_axis(self.joy, lc.L_AXIS_X),
+                                                  self._get_axis(self.joy, lc.L_AXIS_Y)))
         self.grabber_lift.setDefaultCommand(MoveLift(grabber_lift, 0))
         
         
@@ -95,6 +100,9 @@ class OI:
               CommandCall(lambda : grabber_lift.prepare_to_move_to_position(lift_pos_trigger.get_key_value())))
         
         
+        pid_trigger = SmartDashboardUpdateTrigger("set_pos", 500)
+        pid_trigger.whenActive(
+           MoveLiftToPosition(grabber_lift,lambda : pid_trigger.get_key_value()))
         out_of_range = OutOfRangeTrigger(hl.TOO_HIGH, hl.TOO_LOW, grabber_lift.pot_reading)
         out_of_range.whenActive(
               CommandCall(grabber_lift.change_break_mode(True)))
@@ -106,4 +114,12 @@ class OI:
     
         
     def _get_axis(self, joystick, axis):
-        return lambda : joystick.getAxis(axis)
+        def axis_func():
+            val = joystick.getAxis(axis)
+            if abs(val) >= .1:
+                return val
+            else:
+                return 0
+        
+        return axis_func
+    

@@ -12,7 +12,7 @@ class MoveLiftToPosition(Command):
         super().__init__()
         self.grabber_lift = grabber_lift
         self.requires(grabber_lift)
-        
+        self.setInterruptible(True )
         self.position = position
         
         # When the lifter is in position, give the PID Controller a bit of time
@@ -26,7 +26,8 @@ class MoveLiftToPosition(Command):
             takes over so it is only called once.
         '''
         if callable(self.position):
-            self.grabber_lift.move_to_position(self.position())
+            self.grabber_lift.prepare_to_move_to_position(self.position())
+            self.grabber_lift.move_to_position()
         else:
             self.grabber_lift.prepare_to_move_to_position(self.position)
             self.grabber_lift.move_to_position()
@@ -39,19 +40,8 @@ class MoveLiftToPosition(Command):
         '''
             Make this return true when this Command no longer needs to run execute()
         '''
-        
-        if self.pid_timer_started is False:
-            
-            if self.grabber_lift.is_at_position():
-                self.pid_timer_started = True
-                self.setTimeout(self.time_to_adjust)
-                self.grabber_lift.change_break_mode(True)
-                
-            return False
-        
-        else:
-                     
-            return self.isTimedOut()
+
+        return False
     
     def end(self):
         '''

@@ -23,6 +23,7 @@ class MyRobot(wpilib.IterativeRobot):
         self.rb_motor          = wpilib.CANTalon(pv.CAN_LIFT_TALON_BR)
         self.lift_motor_master = wpilib.CANTalon(pv.CAN_LIFT_TALON_MASTER)
         self.lift_motor_slave  = wpilib.CANTalon(pv.CAN_LIFT_TALON_SLAVE)
+        
         #
         # all ports relate to analog input
         #
@@ -103,6 +104,7 @@ class MyRobot(wpilib.IterativeRobot):
             get the robot ready for teleop mode
         '''
         self.timer.reset()
+        self.oi.auto_choose.getSelected().cancel()
     
     def teleopPeriodic(self):
            

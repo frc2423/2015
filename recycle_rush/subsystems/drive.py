@@ -70,6 +70,9 @@ class Drive(Subsystem):
         '''
         #self.gyro_pid.disable()
         self.robot_drive.mecanumDrive_Cartesian(x, y, z, angle)
+        wpilib.SmartDashboard.putNumber("x axis", x)
+        wpilib.SmartDashboard.putNumber("y axis", y)
+        wpilib.SmartDashboard.putNumber("z axis", z)
         
     def robot_rotate(self, angle):
         '''

@@ -37,6 +37,9 @@ class MecanumDrive(Command):
         x = self.get_x() if callable(self.get_x) else self.get_x
         y = self.get_y() if callable(self.get_y) else self.get_y
         z = self.get_z() if callable(self.get_z) else self.get_z
+        
+        x = x * .7
+        
         self.drive.robot_move(x, y, z, angle)
         
 
