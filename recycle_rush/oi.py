@@ -12,6 +12,7 @@ from commands.auto_do_nothing import AutoDoNothing
 from commands.auto_move_forward import AutoMoveForward
 from commands.auto_one_object import Auto_One_Object
 from commands.arcade_drive import ArcadeDrive
+from commands.tank_drive import TankDrive
 from subsystems.grabber_lift import GrabberLift
 from common.smartdashboard_update_trigger import SmartDashboardUpdateTrigger
 from common.out_of_range_trigger import OutOfRangeTrigger
@@ -19,6 +20,7 @@ from common.value_updated_trigger import ValueUpdatedTrigger
 from common import height_levels as hl
 from wpilib.sendablechooser import SendableChooser
 from wpilib.smartdashboard import SmartDashboard
+from subsystems.grabber_lift import GrabberLift
 
 class OI:
     
@@ -59,8 +61,8 @@ class OI:
         self.height_level_trigger = ValueUpdatedTrigger(self.height_level.getSelected)
         
         # Attach commands to buttons
-        self.l_bumper.whileActive(MoveLift(grabber_lift, -.5))
-        self.l_trigger.whileActive(MoveLift(grabber_lift, .5))
+        self.l_bumper.whileActive(MoveLift(grabber_lift, -.7))
+        self.l_trigger.whileActive(MoveLift(grabber_lift, .7))
         self.r_bumper.whenPressed(ClawRelease(grabber_lift))
         self.r_trigger.whenPressed(ClawGrab(grabber_lift))
         self.btn_two.whenPressed(CommandCall(lambda : grabber_lift.move_to_position()))
@@ -76,9 +78,14 @@ class OI:
         #                                          self._get_axis(self.joy, lc.R_AXIS_X)))
         
         
-        self.drive.setDefaultCommand(ArcadeDrive(self.drive, self._get_axis(self.joy, lc.L_AXIS_X),
-                                                  self._get_axis(self.joy, lc.L_AXIS_Y)))
+        #self.drive.setDefaultCommand(ArcadeDrive(self.drive, self._get_axis(self.joy, lc.L_AXIS_X),
+        #                                          self._get_axis(self.joy, lc.L_AXIS_Y)))
+        
+        self.drive.setDefaultCommand(TankDrive(self.drive, self._get_axis(self.joy, lc.L_AXIS_Y),
+                                                  self._get_axis(self.joy, lc.R_AXIS_Y)))
         self.grabber_lift.setDefaultCommand(MoveLift(grabber_lift, 0))
+        
+        
         
         
         #create pid update triggers
@@ -95,24 +102,21 @@ class OI:
               CommandCall(lambda : grabber_lift.update_pid( d = lift_d_trigger.get_key_value() ) ) )
 
         #create update trigger for position
-        lift_pos_trigger = SmartDashboardUpdateTrigger('lift_goal_pos', .1)
-        lift_pos_trigger.whenActive(
-              CommandCall(lambda : grabber_lift.prepare_to_move_to_position(lift_pos_trigger.get_key_value())))
-        
-        
-        pid_trigger = SmartDashboardUpdateTrigger("set_pos", 500)
-        pid_trigger.whenActive(
-           MoveLiftToPosition(grabber_lift,lambda : pid_trigger.get_key_value()))
-        out_of_range = OutOfRangeTrigger(hl.TOO_HIGH, hl.TOO_LOW, grabber_lift.pot_reading)
-        out_of_range.whenActive(
-              CommandCall(grabber_lift.change_break_mode(True)))
-        
-        in_range = OutOfRangeTrigger(hl.TOO_HIGH, hl.TOO_LOW, grabber_lift.pot_reading)
-        in_range.whenInactive(
-              CommandCall(grabber_lift.change_break_mode(False)))
-        
+        lift_pos_trigger = SmartDashboardUpdateTrigger('lift_goal_pos', 500)
+        lift_pos_trigger.whenActive(MoveLiftToPosition(grabber_lift, lift_pos_trigger.get_key_value))
+
+#         pid_trigger = SmartDashboardUpdateTrigger("set_pos", 500)
+#         pid_trigger.whenActive(
+#            MoveLiftToPosition(grabber_lift,pid_trigger.get_key_value))
+#         #out_of_range = OutOfRangeTrigger(hl.TOO_HIGH, hl.TOO_LOW, grabber_lift.pot_reading)
+#         #out_of_range.whenActive(
+#               CommandCall(lambda: grabber_lift.change_break_mode(True)))
+#         
+#         in_range = OutOfRangeTrigger(hl.TOO_HIGH, hl.TOO_LOW, grabber_lift.pot_reading)
+#         in_range.whenInactive(
+#               CommandCall(lambda: grabber_lift.change_break_mode(False)))
+#         
     
-        
     def _get_axis(self, joystick, axis):
         def axis_func():
             val = joystick.getAxis(axis)

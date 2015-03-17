@@ -59,13 +59,13 @@ class GrabberLift(Subsystem):
         self.goal_position = 0
         self.mode = None
         # set master PID settings
-        #self.motor_master.setFeedbackDevice(GrabberLift.kAnalogPot)
+        self.motor_master.setFeedbackDevice(GrabberLift.kAnalogPot)
         self.motor_master.setPID(p, i, d)
+        self.motor_master.reverseOutput(True)
    #     self.motor_master.setForwardSoftLimit(900)
   #      self.motor_master.setReverseSoftLimit(100)
-        self.motor_master.setCloseLoopRampRate(.1)
-        self.goal_position = 500
-        self.tolerance = 50
+        #self.motor_master.setCloseLoopRampRate(.5)
+        self.tolerance = 15
         #set master control mode to default %vbus
         self.set_mode(GrabberLift.mPercentVbus)
         
@@ -110,9 +110,9 @@ class GrabberLift(Subsystem):
         ''' 
             Moves lifter to a specified position 
         '''
-        #self.set_mode(GrabberLift.mPostion)
-        #self.motor_master.set(self.goal_position)
-        #self.change_break_mode(False)
+        self.set_mode(GrabberLift.mPostion)
+        self.motor_master.set(self.goal_position)
+        self.change_break_mode(False)
         
     def is_at_position(self):
         '''
@@ -140,7 +140,7 @@ class GrabberLift(Subsystem):
         '''
             Updates the PID coefficients
         '''
-        print('updating PID')
+        print('updating PID P: ', p ,'i: ', i, 'd:', d)
         if p: 
             self.p = p
             self.motor_master.setP(p)
@@ -163,8 +163,8 @@ class GrabberLift(Subsystem):
         
     def pot_reading(self):
 
-        return 0
-        #return self.motor_master.getAnalogInRaw()
+        #return 0
+        return self.motor_master.getAnalogInRaw()
         
     def log(self):
         '''
@@ -173,11 +173,11 @@ class GrabberLift(Subsystem):
         
         wpilib.SmartDashboard.putBoolean('box_sensor', self.box_sensor.get())
         
-        #wpilib.SmartDashboard.putNumber('lift_error', self.motor_master.getClosedLoopError())
+        wpilib.SmartDashboard.putNumber('lift_error', self.motor_master.getClosedLoopError())
         
-        #wpilib.SmartDashboard.putNumber('lift_position', self.motor_master.getAnalogInPosition())
+        wpilib.SmartDashboard.putNumber('lift_position', self.motor_master.getAnalogInPosition())
         
-        #wpilib.SmartDashboard.putString('lift_mode', GrabberLift.control_mode_map[self.mode])
+        wpilib.SmartDashboard.putString('lift_mode', GrabberLift.control_mode_map[self.mode])
     
 
         wpilib.SmartDashboard.putNumber('actual_goal_pos', self.goal_position)
