@@ -11,7 +11,7 @@ def bits_to_inches(bits):
     
     
 TOTE_HEIGHT = 12.5 #height is in inches
-START_HEIGHT = TOTE_HEIGHT - 3.5
+START_HEIGHT = 6
 TOTE_HEIGHT_BITS = inches_to_bits(TOTE_HEIGHT)
 START_HEIGHT_BITS = inches_to_bits(START_HEIGHT)
 # In inches
