@@ -9,7 +9,7 @@ class GrabberLift(Subsystem):
     '''    
     kForward = wpilib.DoubleSolenoid.Value.kForward
     kOff = wpilib.DoubleSolenoid.Value.kOff
-    kReverse = wpilib.DoubleSolenoid.Value.kReverse    
+    kReverse = wpilib.DoubleSolenoid.Value.kReverse
     kAnalogPot = wpilib.CANTalon.FeedbackDevice.AnalogPot
     
     mPercentVbus = wpilib.CANTalon.ControlMode.PercentVbus
@@ -162,9 +162,14 @@ class GrabberLift(Subsystem):
         self.motor_slave.enableBrakeMode(yes_or_no_break)
         
     def pot_reading(self):
+<<<<<<< HEAD
+        
+        return self.motor_master.getAnalogInRaw() #removing conflicts
+=======
 
         #return 0
         return self.motor_master.getAnalogInRaw()
+>>>>>>> remotes/upstream/master
         
     def log(self):
         '''
