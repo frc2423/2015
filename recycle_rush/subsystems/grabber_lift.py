@@ -9,7 +9,7 @@ class GrabberLift(Subsystem):
     '''    
     kForward = wpilib.DoubleSolenoid.Value.kForward
     kOff = wpilib.DoubleSolenoid.Value.kOff
-    kReverse = wpilib.DoubleSolenoid.Value.kReverse    
+    kReverse = wpilib.DoubleSolenoid.Value.kReverse
     kAnalogPot = wpilib.CANTalon.FeedbackDevice.AnalogPot
     
     mPercentVbus = wpilib.CANTalon.ControlMode.PercentVbus
