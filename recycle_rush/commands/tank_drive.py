@@ -2,11 +2,11 @@ import wpilib
 from wpilib.command import Command
 from subsystems.drive import Drive
 
-class ArcadeDrive(Command):
+class TankDrive(Command):
     '''
         Used to move the robot
     '''
-    def __init__(self, drive, get_x, get_y):
+    def __init__(self, drive, left, right):
         '''
             initializes arcade drive movement
             :param drive : instance of the class Drive
@@ -16,8 +16,8 @@ class ArcadeDrive(Command):
         super().__init__()
         
         self.drive = drive
-        self.get_x = get_x
-        self.get_y = get_y
+        self.left = left
+        self.right = right
         self.requires(drive)
         
    
@@ -26,9 +26,7 @@ class ArcadeDrive(Command):
             Called repeatedly when this Command is scheduled
             to run
         '''
-        x = self.get_x() if callable(self.get_x) else self.get_x
-        y = self.get_y() if callable(self.get_y) else self.get_y
-        self.drive.robot_move(0, y, x, 0)
+        self.drive.tank(self.left(), self.right())
         
         
     def isFinished(self):

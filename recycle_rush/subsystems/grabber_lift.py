@@ -1,6 +1,7 @@
 import wpilib
 from wpilib.command import Subsystem
 from common import height_levels as hl
+
 class GrabberLift(Subsystem):
     '''
         Used to mobilize grabby thing and lift up the item
@@ -60,10 +61,11 @@ class GrabberLift(Subsystem):
         # set master PID settings
         self.motor_master.setFeedbackDevice(GrabberLift.kAnalogPot)
         self.motor_master.setPID(p, i, d)
-        self.motor_master.setForwardSoftLimit(900)
-        self.motor_master.setReverseSoftLimit(100)
-        self.motor_master.setCloseLoopRampRate(.1)
-        self.goal_position = 500
+        self.motor_master.reverseOutput(True)
+   #     self.motor_master.setForwardSoftLimit(900)
+  #      self.motor_master.setReverseSoftLimit(100)
+        #self.motor_master.setCloseLoopRampRate(.5)
+        self.tolerance = 15
         #set master control mode to default %vbus
         self.set_mode(GrabberLift.mPercentVbus)
         
@@ -110,16 +112,15 @@ class GrabberLift(Subsystem):
         '''
         self.set_mode(GrabberLift.mPostion)
         self.motor_master.set(self.goal_position)
+        self.change_break_mode(False)
         
-        self.set_mode(GrabberLift.mPercentVbus)
-        self.change_break_mode(True)
-        
-    def is_at_position(self,position):
+    def is_at_position(self):
         '''
             compares the actual position of robot to current
             position of the robot
         '''
-        pass
+        #self.motor_master.getClosedLoopError() < self.tolerance
+        return False
     
     def set_mode (self, mode):
         '''
@@ -127,7 +128,7 @@ class GrabberLift(Subsystem):
         '''
         self.motor_master.changeControlMode(mode)
         self.mode = mode
-        
+    
     def get_mode (self):
         '''
             Gets the mode the lift motor is in
@@ -139,7 +140,7 @@ class GrabberLift(Subsystem):
         '''
             Updates the PID coefficients
         '''
-        print('updating PID')
+        print('updating PID P: ', p ,'i: ', i, 'd:', d)
         if p: 
             self.p = p
             self.motor_master.setP(p)
@@ -158,26 +159,32 @@ class GrabberLift(Subsystem):
         Unsure why this is necessary.
         '''
         self.motor_master.enableBrakeMode(yes_or_no_break)
+        self.motor_slave.enableBrakeMode(yes_or_no_break)
         
     def pot_reading(self):
+<<<<<<< HEAD
         
         return self.motor_master.getAnalogInRaw() #removing conflicts
+=======
+
+        #return 0
+        return self.motor_master.getAnalogInRaw()
+>>>>>>> remotes/upstream/master
         
     def log(self):
         '''
             
         '''
-        wpilib.SmartDashboard.putNumber('lift_position', 
-                                        self.motor_master.getAnalogInPosition())
         
         wpilib.SmartDashboard.putBoolean('box_sensor', self.box_sensor.get())
         
         wpilib.SmartDashboard.putNumber('lift_error', self.motor_master.getClosedLoopError())
         
-        wpilib.SmartDashboard.putNumber('lift_position', self.motor_master.getAnalogInRaw())
+        wpilib.SmartDashboard.putNumber('lift_position', self.motor_master.getAnalogInPosition())
         
         wpilib.SmartDashboard.putString('lift_mode', GrabberLift.control_mode_map[self.mode])
     
 
         wpilib.SmartDashboard.putNumber('actual_goal_pos', self.goal_position)
+        #wpilib.SmartDashboard.putNumber('actual_goal_pos', hl.bits_to_inches(self.goal_position))
     

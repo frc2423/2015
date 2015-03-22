@@ -27,6 +27,7 @@ class SmartDashboardUpdateTrigger(Trigger):
     def get(self):
         updated = self.auto_update_value.get() != self.last_value
         self.last_value = self.auto_update_value.get()
+        
         return updated
     
     

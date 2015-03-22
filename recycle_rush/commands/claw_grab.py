@@ -15,14 +15,9 @@ class ClawGrab(Command):
         self.setInterruptible(False)
         self.grabber_lift = grabber_lift
         self.requires(grabber_lift)
-        self.setTimeout(1.5)
+        self.setTimeout(1.0)
 
     def initialize(self):
-        """Called just before this Command runs the first time"""
-        #self.grabber_lift.clamp()
-        
-
-    def execute(self):
         """Called repeatedly when this Command is scheduled to run"""
         self.grabber_lift.clamp()
 
@@ -30,7 +25,3 @@ class ClawGrab(Command):
         """This should return true when this command no longer
         needs to run execute()"""
         return self.isTimedOut()
-
-    def end(self):
-        """Called once after isFinished returns true"""
-        pass

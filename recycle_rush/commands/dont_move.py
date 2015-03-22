@@ -1,43 +1,38 @@
-import wpilib
 from wpilib.command import Command
-from subsystems.drive import Drive
 
-class ArcadeDrive(Command):
+class DontMove(Command):
     '''
         Used to move the robot
     '''
-    def __init__(self, drive, get_x, get_y):
+    def __init__(self, drive):
         '''
-            initializes arcade drive movement
-            :param drive : instance of the class Drive
-            :param get_x : can be a function or #
-            :param get_y : 
+            Makes the robot not move
         '''
         super().__init__()
-        
         self.drive = drive
-        self.get_x = get_x
-        self.get_y = get_y
         self.requires(drive)
-        
-   
+
+    def initialize(self):
+        '''
+            Called just before this Command runs the first time
+        '''
+        pass
+    
     def execute(self):
         '''
             Called repeatedly when this Command is scheduled
             to run
         '''
-        x = self.get_x() if callable(self.get_x) else self.get_x
-        y = self.get_y() if callable(self.get_y) else self.get_y
-        self.drive.robot_move(0, y, x, 0)
+        self.drive.robot_move(0, 0, 0, 0)
         
-        
+
     def isFinished(self):
         '''
             Make this return true when this Command no longer
             needs to run execute()
         '''
         return False
-   
+    
     def end(self):
         '''
             Called once after isFinished returns true
@@ -50,3 +45,4 @@ class ArcadeDrive(Command):
             more of the same subsystems is scheduled to run
         '''
         self.end()
+        

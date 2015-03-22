@@ -37,6 +37,9 @@ class MecanumDrive(Command):
         x = self.get_x() if callable(self.get_x) else self.get_x
         y = self.get_y() if callable(self.get_y) else self.get_y
         z = self.get_z() if callable(self.get_z) else self.get_z
+        
+        x = x * .7
+        
         self.drive.robot_move(x, y, z, angle)
         
 
@@ -51,11 +54,12 @@ class MecanumDrive(Command):
         '''
             Called once after isFinished returns true
         '''
-        pass
+        self.drive.robot_move (0,0,0,0)
+        
     def interrupted(self):
         '''
             Called when another command which requires one or
             more of the same subsystems is scheduled to run
         '''
-        self.drive.robot_move (0,0,0,0)
+        self.end()
         

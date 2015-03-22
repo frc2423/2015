@@ -8,16 +8,48 @@ from commands.claw_grab import ClawGrab
 from commands.mecanum_drive import MecanumDrive
 from commands.command_call import CommandCall
 from commands.move_lift_to_position import MoveLiftToPosition
+from commands.auto_do_nothing import AutoDoNothing
+from commands.auto_move_forward import AutoMoveForward
+from commands.auto_one_object import Auto_One_Object
+from commands.arcade_drive import ArcadeDrive
+from commands.tank_drive import TankDrive
 from subsystems.grabber_lift import GrabberLift
 from common.smartdashboard_update_trigger import SmartDashboardUpdateTrigger
 from common.out_of_range_trigger import OutOfRangeTrigger
+from common.value_updated_trigger import ValueUpdatedTrigger
 from common import height_levels as hl
+from wpilib.sendablechooser import SendableChooser
+from wpilib.smartdashboard import SmartDashboard
+from subsystems.grabber_lift import GrabberLift
 
 class OI:
     
-    def __init__ (self, grabber_lift, drive):
+    def __init__ (self, grabber_lift, drive, gyro):
         self.joy = Joystick(0)
         self.drive = drive
+        self.grabber_lift = grabber_lift
+        
+        #Sendable Choosers used to create radio button groups on SmartDashboard
+        self.auto_choose = SendableChooser()
+        self.auto_choose.addObject('Auto Do Nothing', AutoDoNothing(drive))
+        self.auto_choose.addObject('Auto Move Forward', AutoMoveForward(drive, gyro))
+        self.auto_choose.addObject('Auto One Object', Auto_One_Object(drive, grabber_lift, gyro))
+        SmartDashboard.putData('Autonomous Mode', self.auto_choose)
+           
+        self.height_level = SendableChooser()
+        self.height_level.addObject('Level 5',  hl.START_HEIGHT + hl.TOTE_HEIGHT * 4)
+        self.height_level.addObject('Level 4',   hl.START_HEIGHT + hl.TOTE_HEIGHT * 3)
+        self.height_level.addObject('Level 3',  hl.START_HEIGHT + hl.TOTE_HEIGHT * 2)
+        self.height_level.addObject('Level 2', hl.START_HEIGHT + hl.TOTE_HEIGHT)
+        self.height_level.addObject('Level 1', hl.START_HEIGHT)     
+        SmartDashboard.putData('Height Level', self.height_level)
+        
+        self.offset = SendableChooser()
+        self.offset.addObject('Step', hl.STEP_HEIGHT)
+        self.offset.addObject('Scoring Platform', hl.SCORING_PLATFORM_HEIGHT)
+        self.offset.addObject('Floor', 0)
+        SmartDashboard.putData('Offset Height', self.offset)
+        
         
         # Create buttons
         self.l_bumper = JoystickButton(self.joy, lc.L_BUMPER)
@@ -26,20 +58,33 @@ class OI:
         self.r_trigger = JoystickButton(self.joy, lc.R_TRIGGER)
         self.btn_one   = JoystickButton(self.joy, 1)
         self.btn_two   = JoystickButton(self.joy, 2)
+        self.height_level_trigger = ValueUpdatedTrigger(self.height_level.getSelected)
         
         # Attach commands to buttons
-        self.l_bumper.whileActive(MoveLift(grabber_lift, .5))
-        self.l_trigger.whileActive(MoveLift(grabber_lift, -.5))
+        self.l_bumper.whileActive(MoveLift(grabber_lift, -.7))
+        self.l_trigger.whileActive(MoveLift(grabber_lift, .7))
         self.r_bumper.whenPressed(ClawRelease(grabber_lift))
         self.r_trigger.whenPressed(ClawGrab(grabber_lift))
         self.btn_two.whenPressed(CommandCall(lambda : grabber_lift.move_to_position()))
         self.btn_one.whenPressed(CommandCall(lambda : grabber_lift.set_mode(GrabberLift.mPercentVbus)))
-
-        
+#         self.height_level_trigger.whenActive(
+#              MoveLiftToPosition(grabber_lift, 
+#                                 hl.inches_to_bits(self.height_level.getSelected() +
+#                                                             self.offset.getSelected())))
+#         
         # Default command
-        self.drive.setDefaultCommand(MecanumDrive(self.drive, self._get_axis(self.joy, lc.R_AXIS_X),
-                                                  self._get_axis(self.joy, lc.R_AXIS_Y),
-                                                  self._get_axis(self.joy, lc.L_AXIS_X)))
+        #self.drive.setDefaultCommand(MecanumDrive(self.drive, self._get_axis(self.joy, lc.L_AXIS_X),
+        #                                          self._get_axis(self.joy, lc.L_AXIS_Y),
+        #                                          self._get_axis(self.joy, lc.R_AXIS_X)))
+        
+        
+        #self.drive.setDefaultCommand(ArcadeDrive(self.drive, self._get_axis(self.joy, lc.L_AXIS_X),
+        #                                          self._get_axis(self.joy, lc.L_AXIS_Y)))
+        
+        self.drive.setDefaultCommand(TankDrive(self.drive, self._get_axis(self.joy, lc.L_AXIS_Y),
+                                                  self._get_axis(self.joy, lc.R_AXIS_Y)))
+        self.grabber_lift.setDefaultCommand(MoveLift(grabber_lift, 0))
+        
         
         
         
@@ -57,24 +102,28 @@ class OI:
               CommandCall(lambda : grabber_lift.update_pid( d = lift_d_trigger.get_key_value() ) ) )
 
         #create update trigger for position
-        lift_pos_trigger = SmartDashboardUpdateTrigger('lift_goal_pos', .1)
-        lift_pos_trigger.whenActive(
-              CommandCall(lambda : grabber_lift.prepare_to_move_to_position(lift_pos_trigger.get_key_value())))
-        
-        lift_position = SmartDashboardUpdateTrigger('lift_position',0)
-        lift_position.whenActive(
-              MoveLiftToPosition(grabber_lift, hl.inches_to_bits(lift_position.get_key_value() + 
-              wpilib.SmartDashboard.getNumber('lift_offset', 0))))
-        
-        out_of_range = OutOfRangeTrigger(hl.TOO_HIGH, hl.TOO_LOW, grabber_lift.pot_reading)
-        out_of_range.whenActive(
-              CommandCall(grabber_lift.change_break_mode(True)))
-        
-        in_range = OutOfRangeTrigger(hl.TOO_HIGH, hl.TOO_LOW, grabber_lift.pot_reading)
-        in_range.whenInactive(
-              CommandCall(grabber_lift.change_break_mode(False)))
-        
-    def _get_axis(self, joystick, axis):
-        return lambda : joystick.getAxis(axis)
+        lift_pos_trigger = SmartDashboardUpdateTrigger('lift_goal_pos', 500)
+        lift_pos_trigger.whenActive(MoveLiftToPosition(grabber_lift, lift_pos_trigger.get_key_value))
 
+#         pid_trigger = SmartDashboardUpdateTrigger("set_pos", 500)
+#         pid_trigger.whenActive(
+#            MoveLiftToPosition(grabber_lift,pid_trigger.get_key_value))
+#         #out_of_range = OutOfRangeTrigger(hl.TOO_HIGH, hl.TOO_LOW, grabber_lift.pot_reading)
+#         #out_of_range.whenActive(
+#               CommandCall(lambda: grabber_lift.change_break_mode(True)))
+#         
+#         in_range = OutOfRangeTrigger(hl.TOO_HIGH, hl.TOO_LOW, grabber_lift.pot_reading)
+#         in_range.whenInactive(
+#               CommandCall(lambda: grabber_lift.change_break_mode(False)))
+#         
+    
+    def _get_axis(self, joystick, axis):
+        def axis_func():
+            val = joystick.getAxis(axis)
+            if abs(val) >= .1:
+                return val
+            else:
+                return 0
         
+        return axis_func
+    

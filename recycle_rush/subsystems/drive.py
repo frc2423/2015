@@ -63,6 +63,11 @@ class Drive(Subsystem):
         self.robot_drive.mecanumDrive_Cartesian(0, 0, output, 0)
     
     
+    def tank(self, left, right):
+        self.robot_drive.tankDrive(-1 * left * .75, right * .75)
+
+    
+    
     def robot_move(self, x, y, z, angle):
         '''
             this function is used to control the
@@ -70,6 +75,9 @@ class Drive(Subsystem):
         '''
         #self.gyro_pid.disable()
         self.robot_drive.mecanumDrive_Cartesian(x, y, z, angle)
+        wpilib.SmartDashboard.putNumber("x axis", x)
+        wpilib.SmartDashboard.putNumber("y axis", y)
+        wpilib.SmartDashboard.putNumber("z axis", z)
         
     def robot_rotate(self, angle):
         '''
