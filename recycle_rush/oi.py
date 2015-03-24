@@ -21,8 +21,12 @@ from common import height_levels as hl
 from wpilib.sendablechooser import SendableChooser
 from wpilib.smartdashboard import SmartDashboard
 from subsystems.grabber_lift import GrabberLift
+from commands.claw_toggle import ClawToggle
+
 
 class OI:
+    
+    
     
     def __init__ (self, grabber_lift, drive, gyro):
         self.joy = Joystick(0)
@@ -63,8 +67,7 @@ class OI:
         # Attach commands to buttons
         self.l_bumper.whileActive(MoveLift(grabber_lift, -.7))
         self.l_trigger.whileActive(MoveLift(grabber_lift, .7))
-        self.r_bumper.whenPressed(ClawRelease(grabber_lift))
-        self.r_trigger.whenPressed(ClawGrab(grabber_lift))
+        self.r_bumper.whenPressed(ClawToggle(grabber_lift))
         self.btn_two.whenPressed(CommandCall(lambda : grabber_lift.move_to_position()))
         self.btn_one.whenPressed(CommandCall(lambda : grabber_lift.set_mode(GrabberLift.mPercentVbus)))
 #         self.height_level_trigger.whenActive(

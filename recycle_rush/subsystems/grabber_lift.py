@@ -76,6 +76,9 @@ class GrabberLift(Subsystem):
         
         #set slave to follow master commands(this sets the motor master id[which is 1]to the )
         self.motor_slave.set(self.motor_master.getDeviceID())
+        
+        #
+        self.clamped = False
     
         
         
@@ -84,12 +87,17 @@ class GrabberLift(Subsystem):
             Grabber arm clamps so it can hold totes/bins.
         '''
         self.grabber.set(GrabberLift.kForward)
+        self.clamped = True
     
     def release (self):
         '''
             Grabber arm releases so it can let go of bins/totes.
         '''
         self.grabber.set(GrabberLift.kReverse)
+        self.clamped = False
+        
+    def is_clamped(self):
+        return self.clamped
         
     def move_lifter(self, speed):
         '''
@@ -162,15 +170,9 @@ class GrabberLift(Subsystem):
         self.motor_slave.enableBrakeMode(yes_or_no_break)
         
     def pot_reading(self):
-<<<<<<< HEAD
         
-        return self.motor_master.getAnalogInRaw() #removing conflicts
-=======
+        return self.motor_master.getAnalogInRaw() #removing conflictsxs
 
-        #return 0
-        return self.motor_master.getAnalogInRaw()
->>>>>>> remotes/upstream/master
-        
     def log(self):
         '''
             

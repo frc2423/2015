@@ -10,9 +10,9 @@ class Drive(Subsystem):
         precise angle measure
     '''
     
-    kP_default = .5
-    kI_default = .01
-    kD_default = .0
+    kP_default = 5
+    kI_default = 0
+    kD_default = 0
     
     def __init__(self, 
                  lf_motor, 
@@ -30,8 +30,8 @@ class Drive(Subsystem):
         '''
         super().__init__()
         self.robot_drive = wpilib.RobotDrive(lf_motor, lb_motor, rf_motor, rb_motor)
-        self.robot_drive.setInvertedMotor(1, True)
-        self.robot_drive.setInvertedMotor(3, True)
+        self.robot_drive.setInvertedMotor(wpilib.RobotDrive.MotorType.kFrontRight, True)
+        self.robot_drive.setInvertedMotor(wpilib.RobotDrive.MotorType.kRearRight, True)
         self.lf_motor = lf_motor
         self.lb_motor = lb_motor
         self.rf_motor = rf_motor
