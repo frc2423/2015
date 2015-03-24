@@ -20,7 +20,7 @@ class MoveLiftToPosition(Command):
         self.pid_timer_started = False
         self.time_to_adjust = .2
         
-    def initialize(self):
+    def execute(self):
         '''
             Moves the lifter to a particular position. The PIDController
             takes over so it is only called once.

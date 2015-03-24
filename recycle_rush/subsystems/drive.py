@@ -11,9 +11,9 @@ class Drive(Subsystem):
         precise angle measure
     '''
     
-    kP_default = .5
-    kI_default = .01
-    kD_default = .0
+    kP_default = 5
+    kI_default = 0
+    kD_default = 0
     
     def __init__(self, 
                  lf_motor, 
@@ -31,8 +31,8 @@ class Drive(Subsystem):
         '''
         super().__init__()
         self.robot_drive = KwarqsDriveMech(lf_motor, lb_motor, rf_motor, rb_motor)
-        self.robot_drive.setInvertedMotor(1, True)
-        self.robot_drive.setInvertedMotor(3, True)
+        self.robot_drive.setInvertedMotor(wpilib.RobotDrive.MotorType.kFrontRight, True)
+        self.robot_drive.setInvertedMotor(wpilib.RobotDrive.MotorType.kRearRight, True)
         self.lf_motor = lf_motor
         self.lb_motor = lb_motor
         self.rf_motor = rf_motor
@@ -64,6 +64,12 @@ class Drive(Subsystem):
         self.robot_drive.mecanumDrive_Cartesian(0, 0, output, 0)
     
     
+    def tank(self, left, right):
+        self.robot_drive.tankDrive(-1 * left * .75, right * .75)
+
+    
+    
+    def robot_move(self, x, y, z, angle):
     def robot_move(self, x, y, z, angle, weight_modifier = None):
         '''
             this function is used to control the

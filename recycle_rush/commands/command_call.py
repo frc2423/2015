@@ -24,4 +24,6 @@ class CommandCall(Command):
     def end(self):
         '''The function is immediately executed'''
             
-        self.call()
+        if callable(self.call):    
+            self.call()
+        
