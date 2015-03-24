@@ -48,7 +48,9 @@ class MoveLiftToPosition(Command):
             Called once after isFinished returns true.
             Want lifter to stop before other stuff happens
         ''' 
-        self.grabber_lift.move_lifter(0)
+        position = self.grabber_lift.pot_reading()
+        self.grabber_lift.prepare_to_move_to_position(position)
+        self.grabber_lift.move_to_position()
     
     def interrupted(self):
         '''
