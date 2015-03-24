@@ -75,10 +75,13 @@ class OI:
 #                                 hl.inches_to_bits(self.height_level.getSelected() +
 #                                                             self.offset.getSelected())))
 #         
-        # Default command
-        self.drive.setDefaultCommand(MecanumDrive(self.drive, self._get_axis(self.joy, lc.L_AXIS_X),
-                                                  self._get_axis(self.joy, lc.L_AXIS_Y),
-                                                  self._get_axis(self.joy, lc.R_AXIS_X)))
+
+        #Default command
+        self.drive.setDefaultCommand(MecanumDrive(self.drive, self._get_axis(self.joy, lc.L_AXIS_X), #resolve merge conflict
+                                                  self._get_axis(self.joy, lc.L_AXIS_Y), #resolve merge conflict
+                                                  self._get_axis(self.joy, lc.R_AXIS_X), #resolve merge conflict
+                                                  None, #resolve merge conflict
+                                                  .7))  #resolve merge conflict
         
         
         #self.drive.setDefaultCommand(ArcadeDrive(self.drive, self._get_axis(self.joy, lc.L_AXIS_X),

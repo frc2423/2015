@@ -2,6 +2,7 @@ import wpilib
 from wpilib.command import Subsystem
 import math
 import sys
+from custom.kwarqs_drive_mech import KwarqsDriveMech
 
 class Drive(Subsystem): 
     '''
@@ -29,7 +30,7 @@ class Drive(Subsystem):
             gyro and a mecanum drive.
         '''
         super().__init__()
-        self.robot_drive = wpilib.RobotDrive(lf_motor, lb_motor, rf_motor, rb_motor)
+        self.robot_drive = KwarqsDriveMech(lf_motor, lb_motor, rf_motor, rb_motor)
         self.robot_drive.setInvertedMotor(wpilib.RobotDrive.MotorType.kFrontRight, True)
         self.robot_drive.setInvertedMotor(wpilib.RobotDrive.MotorType.kRearRight, True)
         self.lf_motor = lf_motor
@@ -69,11 +70,13 @@ class Drive(Subsystem):
     
     
     def robot_move(self, x, y, z, angle):
+    def robot_move(self, x, y, z, angle, weight_modifier = None):
         '''
             this function is used to control the
             power/speed/torque of our robot/drive/motors
         '''
         #self.gyro_pid.disable()
+        self.robot_drive.set_multiplier(weight_modifier)
         self.robot_drive.mecanumDrive_Cartesian(x, y, z, angle)
         wpilib.SmartDashboard.putNumber("x axis", x)
         wpilib.SmartDashboard.putNumber("y axis", y)
