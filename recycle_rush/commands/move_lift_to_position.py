@@ -51,6 +51,7 @@ class MoveLiftToPosition(Command):
         position = self.grabber_lift.pot_reading()
         self.grabber_lift.prepare_to_move_to_position(position)
         self.grabber_lift.move_to_position()
+        print("moving to position: ", position)
     
     def interrupted(self):
         '''

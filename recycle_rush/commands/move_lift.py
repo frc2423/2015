@@ -46,13 +46,27 @@ class MoveLift(Command):
         '''
             Make this return true when this Command no longer needs to run execute()
         '''
+        
         return False
     
-    def interrupted(self):
+    def end(self):  
         '''
             Called when another command which requires one or more of the same
             subsystems is scheduled to run. Stops lift motor.
         '''
         
         self.grabber_lift.move_lifter(0)
+        self.grabber_lift.change_break_mode(True)
+        position = self.grabber_lift.pot_reading()
+        self.grabber_lift.prepare_to_move_to_position(position)
+        self.grabber_lift.move_to_position()
+        print("moving to position: ", position)
         
+        
+    def interrupted(self):
+        '''
+            Called when another command which requires one or more of the same
+            subsystems is scheduled to run.
+            We want the command to end if this happens.
+        '''
+        self.end()

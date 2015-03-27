@@ -28,6 +28,7 @@ class MyRobot(wpilib.IterativeRobot):
         # all ports relate to analog input
         #
         self.gyro = wpilib.Gyro(pv.AI_GIRO)
+    
         
         #
         # all ports relate to digital input

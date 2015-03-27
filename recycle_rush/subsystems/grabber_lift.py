@@ -16,7 +16,7 @@ class GrabberLift(Subsystem):
     mPostion     = wpilib.CANTalon.ControlMode.Position
     mFollower    = wpilib.CANTalon.ControlMode.Follower
     
-    kP_default = 300
+    kP_default = 15
     kI_default = 0
     kD_default = 0
     

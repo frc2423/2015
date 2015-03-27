@@ -81,7 +81,7 @@ class OI:
                                                   self._get_axis(self.joy, lc.L_AXIS_Y), #resolve merge conflict
                                                   self._get_axis(self.joy, lc.R_AXIS_X), #resolve merge conflict
                                                   None, #resolve merge conflict
-                                                  .7))  #resolve merge conflict
+                                                  .1))  #resolve merge conflict
         
         
         #self.drive.setDefaultCommand(ArcadeDrive(self.drive, self._get_axis(self.joy, lc.L_AXIS_X),

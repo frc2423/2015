@@ -69,7 +69,6 @@ class Drive(Subsystem):
 
     
     
-    def robot_move(self, x, y, z, angle):
     def robot_move(self, x, y, z, angle, weight_modifier = None):
         '''
             this function is used to control the
