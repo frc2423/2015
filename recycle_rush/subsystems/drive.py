@@ -43,6 +43,12 @@ class Drive(Subsystem):
         self.i = i
         self.d = d
         
+        self.curr_x = 0
+        self.curr_y = 0
+        self.curr_z = 0
+        
+        self.max_change = .1
+        
 #         self.gyro_pid = wpilib.PIDController(p, i, d, self.gyro, self.rb_motor)
 #         
 #         # we are using a continuous sensor here 
@@ -75,12 +81,34 @@ class Drive(Subsystem):
             power/speed/torque of our robot/drive/motors
         '''
         #self.gyro_pid.disable()
-        self.robot_drive.set_multiplier(weight_modifier)
-        self.robot_drive.mecanumDrive_Cartesian(x, y, z, angle)
-        wpilib.SmartDashboard.putNumber("x axis", x)
-        wpilib.SmartDashboard.putNumber("y axis", y)
-        wpilib.SmartDashboard.putNumber("z axis", z)
         
+        self.curr_x = self.slow_change(self.curr_x, x)
+        self.curr_y = self.slow_change(self.curr_y, y)
+        self.curr_z = self.slow_change(self.curr_z, y)
+        
+        self.robot_drive.set_multiplier(weight_modifier)
+        
+        self.robot_drive.mecanumDrive_Cartesian(self.curr_x, self.curr_y, self.curr_z, angle)
+        wpilib.SmartDashboard.putNumber("x axis", self.curr_x)
+        wpilib.SmartDashboard.putNumber("y axis", self.curr_y)
+        wpilib.SmartDashboard.putNumber("z axis", self.curr_z)
+        
+    def slow_change(self, val, goal):
+        '''
+            make speed ups or slow downs less intense to prevent power drain 
+        '''
+        diff = val - goal
+        if diff < (-1 * self.max_change) :
+            #goal is greater then self.max_change more than current val
+            return val + self.max_change
+        
+        elif diff > self.max_change:
+            #goal is less then max_change less the current_val
+            return val - self.max_change
+        
+        else:
+            return goal
+               
     def robot_rotate(self, angle):
         '''
             rotate to a certain angle within a specified set
