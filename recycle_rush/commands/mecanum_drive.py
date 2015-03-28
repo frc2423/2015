@@ -1,4 +1,5 @@
 from wpilib.command import Command
+import wpilib
 
 class MecanumDrive(Command):
     '''
@@ -22,12 +23,18 @@ class MecanumDrive(Command):
         self.get_multi = weight_modifier
         self.gyro = gyro
         self.requires(drive)
+        
+        
+        self.input_ramp_timer = wpilib.Timer()
+        self.current_x = 0
+        self.current_y = 0
+        self.current_z = 0
 
     def initialize(self):
         '''
             Called just before this Command runs the first time
         '''
-        pass
+        self.input_ramp_timer.start()
     
     def execute(self):
         '''
@@ -40,7 +47,44 @@ class MecanumDrive(Command):
         z = self.get_z() if callable(self.get_z) else self.get_z
         mutli = self.get_multi() if callable(self.get_multi) else self.get_multi
         
-        self.drive.robot_move(x, y, z, angle, mutli)
+        if self.input_ramp_timer.hasPeriodPassed(.08):
+            
+            if (x > 0 and self.current_x < 0) or (x < 0 and self.current_x > 0):
+                self.current_x = 0
+                
+            if (y > 0 and self.current_y < 0) or (y < 0 and self.current_y > 0):
+                self.current_y = 0
+                
+            if (z > 0 and self.current_z < 0) or (z < 0 and self.current_z > 0):
+                self.current_z = 0
+            
+            #ramp_rate = .1
+            ramp_rate = 1
+            
+            dx = x - self.current_x
+            dy = y - self.current_y
+            dz = z - self.current_z
+            
+            if dx < 0:
+                self.current_x = self.current_x + max(-ramp_rate, dx)
+            else:
+               self.current_x = self.current_x + min(ramp_rate, dx) 
+               
+            if dy < 0:
+                self.current_y = self.current_y + max(-ramp_rate, dy)
+            else:
+               self.current_y = self.current_y + min(ramp_rate, dy) 
+               
+            if dz < 0:
+                self.current_z = self.current_z + max(-ramp_rate, dz)
+            else:
+               self.current_z = self.current_z + min(ramp_rate, dz) 
+               
+            self.input_ramp_timer.reset()
+            print('period passed')
+            
+        
+        self.drive.robot_move(self.current_x, self.current_y, self.current_z, angle, mutli)
         
 
     def isFinished(self):

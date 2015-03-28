@@ -29,14 +29,15 @@ class OI:
     
     
     def __init__ (self, grabber_lift, drive, gyro):
+        
         self.joy = Joystick(0)
         self.drive = drive
         self.grabber_lift = grabber_lift
         
         #Sendable Choosers used to create radio button groups on SmartDashboard
         self.auto_choose = SendableChooser()
-        self.auto_choose.addObject('Auto Do Nothing', AutoDoNothing(drive))
-        self.auto_choose.addObject('Auto Move Forward', AutoMoveForward(drive, gyro))
+        #self.auto_choose.addObject('Auto Do Nothing', AutoDoNothing(drive))
+        self.auto_choose.addObject('Auto Move Forward', AutoMoveForward(drive, gyro, 1.25))
         self.auto_choose.addObject('Auto One Object', Auto_One_Object(drive, grabber_lift, gyro))
         SmartDashboard.putData('Autonomous Mode', self.auto_choose)
            
@@ -120,7 +121,7 @@ class OI:
 #         in_range = OutOfRangeTrigger(hl.TOO_HIGH, hl.TOO_LOW, grabber_lift.pot_reading)
 #         in_range.whenInactive(
 #               CommandCall(lambda: grabber_lift.change_break_mode(False)))
-#         
+#    
     
     def _get_axis(self, joystick, axis):
         def axis_func():

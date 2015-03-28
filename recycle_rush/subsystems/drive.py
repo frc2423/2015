@@ -82,10 +82,12 @@ class Drive(Subsystem):
         '''
         #self.gyro_pid.disable()
         
-        self.curr_x = self.slow_change(self.curr_x, x)
-        self.curr_y = self.slow_change(self.curr_y, y)
-        self.curr_z = self.slow_change(self.curr_z, y)
+        speed_limit = .75
         
+        self.curr_x = self.slow_change(self.curr_x, x * speed_limit)
+        self.curr_y = self.slow_change(self.curr_y, y * speed_limit)
+        self.curr_z = self.slow_change(self.curr_z, z * speed_limit)
+
         self.robot_drive.set_multiplier(weight_modifier)
         
         self.robot_drive.mecanumDrive_Cartesian(self.curr_x, self.curr_y, self.curr_z, angle)
