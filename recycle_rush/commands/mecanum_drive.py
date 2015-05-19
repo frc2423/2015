@@ -58,27 +58,29 @@ class MecanumDrive(Command):
             if (z > 0 and self.current_z < 0) or (z < 0 and self.current_z > 0):
                 self.current_z = 0
             
-            #ramp_rate = .1
-            ramp_rate = 1
+            x_ramp_rate = 1
+            y_ramp_rate = 1
+            z_ramp_rate = .08
+            #ramp_rate = 1
             
             dx = x - self.current_x
             dy = y - self.current_y
             dz = z - self.current_z
             
             if dx < 0:
-                self.current_x = self.current_x + max(-ramp_rate, dx)
+                self.current_x = self.current_x + max(-x_ramp_rate, dx)
             else:
-               self.current_x = self.current_x + min(ramp_rate, dx) 
+               self.current_x = self.current_x + min(x_ramp_rate, dx) 
                
             if dy < 0:
-                self.current_y = self.current_y + max(-ramp_rate, dy)
+                self.current_y = self.current_y + max(-y_ramp_rate, dy)
             else:
-               self.current_y = self.current_y + min(ramp_rate, dy) 
+               self.current_y = self.current_y + min(y_ramp_rate, dy) 
                
             if dz < 0:
-                self.current_z = self.current_z + max(-ramp_rate, dz)
+                self.current_z = self.current_z + max(-z_ramp_rate, dz)
             else:
-               self.current_z = self.current_z + min(ramp_rate, dz) 
+               self.current_z = self.current_z + min(z_ramp_rate, dz) 
                
             self.input_ramp_timer.reset()
             print('period passed')

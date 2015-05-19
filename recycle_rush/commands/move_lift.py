@@ -1,5 +1,6 @@
 from wpilib.command import Command
 from subsystems.grabber_lift import GrabberLift
+from common.height_levels import BIT_PER_INCH
 import wpilib
 
 class MoveLift(Command):
@@ -17,7 +18,7 @@ class MoveLift(Command):
         super().__init__()
         self.grabber_lift = grabber_lift
         self.requires(grabber_lift)
-        
+        self.last_set = 0
             
         self.param = param
         
@@ -38,9 +39,12 @@ class MoveLift(Command):
         # otherwise it gives move_lifter the function. 
         #
         if callable(self.param):
-            self.grabber_lift.move_lifter(self.param())
+            self.last_set = self.param()
         else:
-            self.grabber_lift.move_lifter(self.param)
+            self.last_set = self.param
+            
+        
+        self.grabber_lift.move_lifter(self.last_set)
         
     def isFinished(self):
         '''
@@ -55,9 +59,15 @@ class MoveLift(Command):
             subsystems is scheduled to run. Stops lift motor.
         '''
         
-        self.grabber_lift.move_lifter(0)
         self.grabber_lift.change_break_mode(True)
+        self.grabber_lift.move_lifter(0)
         position = self.grabber_lift.pot_reading()
+        
+        if self.last_set > 0:
+            position += int(BIT_PER_INCH * .5)
+        elif self.last_set < 0:
+            position += int(-BIT_PER_INCH * .5)
+            
         self.grabber_lift.prepare_to_move_to_position(position)
         self.grabber_lift.move_to_position()
         print("moving to position: ", position)

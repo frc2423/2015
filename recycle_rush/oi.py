@@ -37,7 +37,7 @@ class OI:
         #Sendable Choosers used to create radio button groups on SmartDashboard
         self.auto_choose = SendableChooser()
         #self.auto_choose.addObject('Auto Do Nothing', AutoDoNothing(drive))
-        self.auto_choose.addObject('Auto Move Forward', AutoMoveForward(drive, gyro, 1.25))
+        self.auto_choose.addObject('Auto Move Forward', AutoMoveForward(drive, gyro, 1.15))
         self.auto_choose.addObject('Auto One Object', Auto_One_Object(drive, grabber_lift, gyro))
         SmartDashboard.putData('Autonomous Mode', self.auto_choose)
            
